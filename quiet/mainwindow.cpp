@@ -4,22 +4,39 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    imgLabel = new QLabel;
-    imgLabel->setBackgroundRole(QPalette::Base);
-    imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    imgLabel->setScaledContents(true);
+    // initialize private member
+    // shared pointer methods?
 
-    scrollArea = new QScrollArea;
-    scrollArea->setWidget(imgLabel);
-    setCentralWidget(scrollArea);
+    //                                                                      - [ImageWidget]
+    //                                                                    |
+    // [MainWindow] - [CentralWidget] -
+    //                                                                    |
+    //                                                                      -
 
-    createActions();
-    createMenus();
 
-    changeDir("C:/Users/sam18/Downloads/Img");
+    // MainWindow only controls Central Widget
 
-    filters << "*.bmp";
-    currentDir.setNameFilters(filters);
+    centralWidget.reset(new CentralWidget(this));
+
+    directoryMgr = new DirectoryManager();
+    directoryMgr->setDirectory("C:/Users/sam18/Downloads/Img");
+
+//    imgLabel = new QLabel;
+//    imgLabel->setBackgroundRole(QPalette::Base);
+//    imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+//    imgLabel->setScaledContents(true);
+
+//    scrollArea = new QScrollArea;
+//    scrollArea->setWidget(imgLabel);
+//    setCentralWidget(scrollArea);
+
+//    createActions();
+//    createMenus();
+
+//    changeDir("C:/Users/sam18/Downloads/Img");
+
+//    filters << "*.bmp";
+//    currentDir.setNameFilters(filters);
 
     setWindowTitle("QUIET v0.0.1");
     resize(500, 500);

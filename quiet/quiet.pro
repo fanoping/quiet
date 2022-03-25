@@ -13,9 +13,19 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    mainwindow.cpp
+    mainwindow.cpp \
+    view/centralwidget.cpp \
+    view/imagewidget.cpp \
+    view/imagepanel.cpp \
+    model/directorymanager.cpp \
+    object/fsentry.cpp
 
 HEADERS  += \
-    mainwindow.h
+    mainwindow.h \
+    view/centralwidget.h \
+    view/imagewidget.h \
+    view/imagepanel.h \
+    model/directorymanager.h \
+    object/fsentry.h
 
 FORMS    +=
