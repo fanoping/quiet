@@ -13,7 +13,7 @@
 #include <memory>  //TODO: handle include memory
 
 #include "model/directorymanager.h"
-
+#include "model/actionmanager.h"
 
 
 //namespace Ui {
@@ -30,14 +30,7 @@ public:
 
     void changeDir(QString dir);
 
-public slots:
-     void openDialog();
-     void next();
-     void prev();
 
-//        void close();
-//        void zoomIn();
-//        void zoomOut();
 
 private:
     void open(QString fileName);
@@ -72,6 +65,17 @@ private:
 
     // Directory Manager
     DirectoryManager* directoryMgr;
+
+
+
+//public slots:
+//     void openDialog();
+//     void next();
+//     void prev();
+
+private slots:
+    void showOpenDialog();
+
 
 
 };

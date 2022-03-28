@@ -4,6 +4,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    actionManager = ActionManager::getInstance();
+
     MainWindow w;
 
     w.show();

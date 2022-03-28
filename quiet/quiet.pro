@@ -18,7 +18,11 @@ SOURCES += main.cpp\
     view/imagewidget.cpp \
     view/imagepanel.cpp \
     model/directorymanager.cpp \
-    object/fsentry.cpp
+    object/fsentry.cpp \
+    model/imagemanager.cpp \
+    object/image.cpp \
+    model/loadimagetask.cpp \
+    model/actionmanager.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -26,6 +30,10 @@ HEADERS  += \
     view/imagewidget.h \
     view/imagepanel.h \
     model/directorymanager.h \
-    object/fsentry.h
+    object/fsentry.h \
+    model/imagemanager.h \
+    object/image.h \
+    model/loadimagetask.h \
+    model/actionmanager.h
 
 FORMS    +=

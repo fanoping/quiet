@@ -18,23 +18,13 @@ public:
 
     bool setDirectory(QString dir);
 
-
-
-
-signals:
-
-    void dirLoaded();
-
-public slots:
-
-
 private:
     // Current Directory
     QString _directory;
 
     // Store loaded entryList (file / directory)
     // TODO: currently only first layer
-    QList<FSEntry> fileEntryList;
+    QList<FSEntry> _fileEntryList;
 
 
     // load entry list from directory

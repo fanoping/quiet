@@ -34,7 +34,6 @@ bool DirectoryManager::setDirectory(QString dirname)
 
     qDebug() << "[Debug] DirectoryManager.cpp - Directory" <<  dirname  << "loaded";
 
-    emit dirLoaded();
     return true;
 }
 
@@ -43,7 +42,7 @@ bool DirectoryManager::setDirectory(QString dirname)
 void DirectoryManager::loadEntryList(QString dir)
 {
     qDebug() << "[DirectoryManager.cpp] file entry list cleared";
-    fileEntryList.clear();
+    _fileEntryList.clear();
 
     QDir directory(_directory);
     QStringList files = directory.entryList();
@@ -51,14 +50,16 @@ void DirectoryManager::loadEntryList(QString dir)
        // ignore "." (hidden files)
        if(filename.startsWith(".")) continue;
 
-       qDebug() << filename;
        QString fullpath = dir + "/" + filename;
+
        if (QFileInfo(fullpath).isDir()) {
-           qDebug() << "Dir";
+           // Directory, currently ignored
        }
        else {
-           qDebug() << "File";
-       }
+           FSEntry newEntry(fullpath);
+           _fileEntryList.append(newEntry);
 
+       }
     }
+    qDebug() << "[Debug] DirectoryManager.cpp - " << _fileEntryList.length() << "files loaded";
 }
