@@ -13,12 +13,14 @@ class DirectoryManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit DirectoryManager(QObject *parent = 0);
+    static DirectoryManager* getInstance();
+
     ~DirectoryManager();
 
     bool setDirectory(QString dir);
 
 private:
+    explicit DirectoryManager(QObject *parent = 0);
     // Current Directory
     QString _directory;
 
@@ -30,5 +32,8 @@ private:
     // load entry list from directory
     void loadEntryList(QString dir);
 };
+
+
+extern DirectoryManager* directoryManager;
 
 #endif // DIRECTORYMANAGER_H

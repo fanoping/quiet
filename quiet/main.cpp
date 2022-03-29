@@ -1,15 +1,19 @@
-#include "mainwindow.h"
 #include <QApplication>
+
+#include "core.h"
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    // initialize all instances
     actionManager = ActionManager::getInstance();
+    directoryManager = DirectoryManager::getInstance();
 
-    MainWindow w;
+    Core core;
 
-    w.show();
+    core.show();
 
     return a.exec();
 }

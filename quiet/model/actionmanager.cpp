@@ -16,23 +16,48 @@ ActionManager* ActionManager::getInstance()
     if (!actionManager) {
         actionManager = new ActionManager();
         initActions();
+        initShortCuts();
     }
-    qDebug() << "Action Manager created";
     return actionManager;
 }
 
 // private
 void ActionManager::initActions()
 {
-    actionManager->_shortcuts.insert("Ctrl+O", "open");
-
+    QAction* openAction = new QAction(tr("Open"), 0);
+    actionManager->_actions.insert("open", openAction);
 }
 
-bool ActionManager::invokeAction(const QString &actionName)
+void ActionManager::initShortCuts()
 {
-
-    bool invoke  = QMetaObject::invokeMethod(this, actionName.toLatin1().constData(), Qt::DirectConnection);
-    qDebug() << actionName.toLatin1().constData();
-    qDebug() << invoke;
-    return true;
+    actionManager->_shortcuts.insert("open", "Ctrl+O");
 }
+
+
+// signals
+// action publisher
+
+
+
+
+// public slots
+
+bool ActionManager::actionReceived(const QString &actionName)
+{
+    // true: action invoked
+    // false: invoke failed
+    qDebug() << actionName;
+    return QMetaObject::invokeMethod(this, (actionName + "ActionReceived").toLatin1().constData(), Qt::DirectConnection);
+
+}
+
+// private slots
+
+void ActionManager::openActionReceived()
+{
+    qDebug() <<"Open Action Received";
+    emit openActionPublished();
+}
+
+
+

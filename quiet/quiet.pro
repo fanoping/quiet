@@ -22,7 +22,10 @@ SOURCES += main.cpp\
     model/imagemanager.cpp \
     object/image.cpp \
     model/loadimagetask.cpp \
-    model/actionmanager.cpp
+    model/actionmanager.cpp \
+    core.cpp \
+    view/contextmenu.cpp \
+    view/contextmenuitem.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -34,6 +37,12 @@ HEADERS  += \
     model/imagemanager.h \
     object/image.h \
     model/loadimagetask.h \
-    model/actionmanager.h
+    model/actionmanager.h \
+    core.h \
+    view/contextmenu.h \
+    view/contextmenuitem.h
 
-FORMS    +=
+FORMS += \
+    view/contextmenu.ui
+
+

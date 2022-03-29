@@ -4,6 +4,8 @@
 // Constructor/Destructor
 //
 
+DirectoryManager* directoryManager = nullptr;
+
 DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent)
 {
 
@@ -11,7 +13,15 @@ DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent)
 
 DirectoryManager::~DirectoryManager()
 {
+    delete directoryManager;
+}
 
+DirectoryManager* DirectoryManager::getInstance()
+{
+    if (!directoryManager) {
+        directoryManager = new DirectoryManager();
+    }
+    return directoryManager;
 }
 
 //

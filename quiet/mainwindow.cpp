@@ -18,14 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     centralWidget.reset(new CentralWidget(this));
 
-    directoryMgr = new DirectoryManager();
-    directoryMgr->setDirectory("C:/Users/sam18/Downloads/Img");
-
 
     // connect
-
-    qDebug() << actionManager;
-    connect(actionManager, &ActionManager::open, this, &MainWindow::showOpenDialog);
 
 //    actionManager->invokeAction("open");
 //    actionManager->invokeAction("close");
@@ -38,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //    scrollArea->setWidget(imgLabel);
 //    setCentralWidget(scrollArea);
 
-    createActions();
-    createMenus();
+
+//    createMenus();
 
 //    changeDir("C:/Users/sam18/Downloads/Img");
 
@@ -56,94 +50,17 @@ MainWindow::~MainWindow()
 
 }
 
-//void MainWindow::openDialog(){
-//    QString fileName = QFileDialog::getOpenFileName(this,
-//                                                    tr("Open File"), currentDir.currentPath());
-//    fileInfo.setFile(fileName);
-//    changeDir(fileInfo.path());
-//    fileList = currentDir.entryList();
-
-//    fileNum = fileList.indexOf(fileInfo.fileName());
-//    qDebug() << fileNum;
-//    open(fileName);
-
-//}
-
-//void MainWindow::changeDir(QString dir)
-//{
-//    currentDir.setCurrent(dir);
-//    currentDir.setNameFilters(filters);
-//    fileNum = 0;
-//}
-
-//void MainWindow::open(QString fileName)
-//{
-//     setWindowTitle(fileInfo.fileName() + " - QUIET v0.0.1");
-
-//     QImage image(fileName);
-
-//     if (image.isNull()) {
-//         QMessageBox::information(this, tr("Image Viewer"), tr("Cannot load Image"));
-//     }
-//     imgLabel->setPixmap(QPixmap::fromImage(image));
-//     imgLabel->adjustSize();
-
-//}
-
-//void MainWindow::next()
-//{
-//    if (++fileNum>=fileList.length()){
-//        fileNum = 0;
-//    }
-//    QString fileName = currentDir.currentPath() + "/" + fileList.at(fileNum);
-//    fileInfo.setFile(fileName);
-//    open(fileName);
-//}
-
-//void MainWindow::prev()
-//{
-//    if (--fileNum< 0){
-//        fileNum = fileList.length() - 1;
-//    }
-//    QString fileName = currentDir.currentPath() + "/" + fileList.at(fileNum);
-//    fileInfo.setFile(fileName);
-//    open(fileName);
-//}
 
 
-void MainWindow::createActions()
-{
-//    openAction = new QAction(tr("Open..."), this);
-//    openAction->setShortcut(tr("Ctrl+O"));
-//    connect(openAction, SIGNAL(triggered()), this, &MainWindow::showOpenDialog);
 
-//    nextAction = new QAction(tr("Next"), this);
-//    nextAction->setShortcut(Qt::Key_Right);
-//    nextAction->setEnabled(true);
-//    connect(nextAction, SIGNAL(triggered()), this, SLOT(next()));
-
-//    prevAction = new QAction(tr("Next"), this);
-//    prevAction->setShortcut(Qt::Key_Left);
-//    prevAction->setEnabled(true);
-//    connect(prevAction, SIGNAL(triggered()), this, SLOT(prev()));
-}
-
-void MainWindow::createMenus()
-{
-    fileMenu = new QMenu(tr("&File"), this);
-    fileMenu->addAction(openAction);
-    fileMenu->addSeparator();
-//    fileMenu->addAction(nextAction);
-//    fileMenu->addAction(prevAction);
-
-    menuBar()->addMenu(fileMenu);
-}
 
 
 
 // private slots
+
 void MainWindow::showOpenDialog()
 {
+    qDebug() << "open dialog triggered";
     QFileDialog dialog(this);
     QStringList filter;
     filter.append("All Files (*)");
@@ -151,6 +68,28 @@ void MainWindow::showOpenDialog()
     dialog.setNameFilters(filter);
     dialog.setWindowTitle("Open File");
     dialog.setWindowModality(Qt::ApplicationModal);
-//    connect(&dialog, &QFileDialog::fileSelected, this, &MainWindow::)
+//    connect(&dialog, &QFileDialog::fileSelected, this, &MainWindow::opened);
     dialog.exec();
+}
+
+
+// Protected Events
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+
+    if(event->button() == Qt::RightButton)  {
+        qDebug() << "Right Button Pressed";
+        if(!contextMenu) {
+            contextMenu.reset(new ContextMenu(this));
+        }
+
+        if(!contextMenu->isVisible()){
+            QPoint pos = cursor().pos();
+            contextMenu->showAt(pos);
+        }
+
+        event->accept();
+//        emit onOpenAction("open");
+    }
 }

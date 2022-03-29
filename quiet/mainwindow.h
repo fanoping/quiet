@@ -14,6 +14,8 @@
 
 #include "model/directorymanager.h"
 #include "model/actionmanager.h"
+#include "view/contextmenu.h"
+
 
 
 //namespace Ui {
@@ -34,8 +36,6 @@ public:
 
 private:
     void open(QString fileName);
-    void createActions();
-    void createMenus();
 
 
     QLabel* imgLabel;
@@ -60,12 +60,12 @@ private:
     // Layout Settings
     QHBoxLayout layout;
     std::shared_ptr<CentralWidget> centralWidget;
+    std::unique_ptr<ContextMenu> contextMenu;
 
 
 
-    // Directory Manager
-    DirectoryManager* directoryMgr;
-
+signals:
+    void onOpenAction(const QString&);
 
 
 //public slots:
@@ -73,10 +73,11 @@ private:
 //     void next();
 //     void prev();
 
-private slots:
+public slots:
     void showOpenDialog();
 
-
+protected:
+    void mousePressEvent(QMouseEvent *event);
 
 };
 
