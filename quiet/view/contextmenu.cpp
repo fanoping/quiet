@@ -8,15 +8,12 @@ ContextMenu::ContextMenu(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags(Qt::Popup);
-//    setAttribute(Qt::WA_TranslucentBackground, true);
-    setAttribute(Qt::WA_NoMousePropagation, false);
     this->hide();
 
     // UI settup
-    ui->open->setAction("open");
+    ui->open->setAction("openAction");
     ui->open->setText(tr("Open"));
 
-    ui->open->setEnabled(false);
 
 }
 

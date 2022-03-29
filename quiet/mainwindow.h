@@ -66,6 +66,7 @@ private:
 
 signals:
     void onOpenAction(const QString&);
+    void onOpenSelectedAction(const QString&);
 
 
 //public slots:

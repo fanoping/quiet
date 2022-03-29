@@ -38,9 +38,11 @@ signals:
 
 public slots:
     bool actionReceived(const QString &actionName);
+//    bool actionReceived(const QString &actionName, const QString& fileName);
 
 private slots:
     void openActionReceived();
+    void fileSelectedReceived();
 
 };
 

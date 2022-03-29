@@ -47,9 +47,18 @@ bool ActionManager::actionReceived(const QString &actionName)
     // true: action invoked
     // false: invoke failed
     qDebug() << actionName;
-    return QMetaObject::invokeMethod(this, (actionName + "ActionReceived").toLatin1().constData(), Qt::DirectConnection);
+    return QMetaObject::invokeMethod(this, (actionName + "Received").toLatin1().constData(), Qt::DirectConnection);
 
 }
+
+//bool ActionManager::actionReceived(const QString &actionName, const QString &fileName)
+//{
+//    // true: action invoked
+//    // false: invoke failed
+//    qDebug() << actionName <<"with filename" << fileName;
+//    return QMetaObject::invokeMethod(this, (actionName + "Received").toLatin1().constData(), Qt::DirectConnection);
+
+//}
 
 // private slots
 
@@ -59,5 +68,8 @@ void ActionManager::openActionReceived()
     emit openActionPublished();
 }
 
+void ActionManager::fileSelectedReceived()
+{
 
+}
 

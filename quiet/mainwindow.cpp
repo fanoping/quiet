@@ -68,7 +68,7 @@ void MainWindow::showOpenDialog()
     dialog.setNameFilters(filter);
     dialog.setWindowTitle("Open File");
     dialog.setWindowModality(Qt::ApplicationModal);
-//    connect(&dialog, &QFileDialog::fileSelected, this, &MainWindow::opened);
+    connect(&dialog, &QFileDialog::fileSelected, this, &MainWindow::onOpenSelectedAction);
     dialog.exec();
 }
 
