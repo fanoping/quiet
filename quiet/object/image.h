@@ -3,6 +3,8 @@
 
 #include <QImage>
 #include <memory>
+#include <QPixmap>
+#include <QDebug>
 
 
 class Image
@@ -12,17 +14,18 @@ public:
     ~Image();
 
     // getters
-    std::shared_ptr<QImage> getImage() { return isEdited() ? _imageEdited :  _image; }
-    std::shared_ptr<QImage> getSourceImage() { return _image; }
+    std::shared_ptr<QImage> getImage() { return isEdited() ? m_imageEdited :  m_image; }
+    std::unique_ptr<QPixmap> getPixmap();
+    std::shared_ptr<QImage> getSourceImage() { return m_image; }
 
     // boolean
     bool isLoaded() { return _isLoaded; }
     bool isEdited() { return _isEdited; }
 
     // Image statistics
-    int height() { return isEdited() ? _imageEdited->height() : _image->height(); }
-    int width() { return isEdited() ? _imageEdited->width() : _image->width(); }
-    QSize size() { return isEdited() ? _imageEdited->size() : _image->size(); }
+    int height() { return isEdited() ? m_imageEdited->height() : m_image->height(); }
+    int width() { return isEdited() ? m_imageEdited->width() : m_image->width(); }
+    QSize size() { return isEdited() ? m_imageEdited->size() : m_image->size(); }
 
 
 signals:
@@ -31,8 +34,8 @@ public slots:
 
 private:
 
-    std::shared_ptr<QImage> _image;
-    std::shared_ptr<QImage> _imageEdited;
+    std::shared_ptr<QImage> m_image;
+    std::shared_ptr<QImage> m_imageEdited;
 
     bool _isLoaded;
     bool _isEdited;

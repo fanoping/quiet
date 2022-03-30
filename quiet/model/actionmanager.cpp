@@ -1,6 +1,6 @@
 #include "actionmanager.h"
 
-ActionManager* actionManager = nullptr;
+ActionManager* g_actionManager = nullptr;
 
 ActionManager::ActionManager(QObject *parent) : QObject(parent)
 {
@@ -8,23 +8,23 @@ ActionManager::ActionManager(QObject *parent) : QObject(parent)
 }
 
 ActionManager::~ActionManager() {
-    delete actionManager;
+    delete g_actionManager;
 }
 
 ActionManager* ActionManager::getInstance()
 {
-    if (!actionManager) {
-        actionManager = new ActionManager();
+    if (!g_actionManager) {
+        g_actionManager = new ActionManager();
 
         initShortCuts();
     }
-    return actionManager;
+    return g_actionManager;
 }
 
 // private
 void ActionManager::initShortCuts()
 {
-    actionManager->m_shortcuts.insert("Ctrl+O", "open");
+    g_actionManager->m_shortcuts.insert("Ctrl+O", "open");
 }
 
 

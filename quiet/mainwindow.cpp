@@ -39,16 +39,30 @@ MainWindow* MainWindow::getInstance()
 }
 
 
+//
+// Provide Connection with all other managers (ActionManager, DirectoryManager)
+// View - Model Connection
+//
 
 void MainWindow::initConnect()
 {
-    qDebug()<<"connect";
-    connect(actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
+    qDebug() << "[Debug] MainWindow.cpp - Initial Connection";
+
+    //ActionManager -> MainWindow (Received Action)
+    connect(g_actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
+
+    connect(g_imageManager, &ImageManager::imageLoaded, g_mainWindow, &MainWindow::showImage);
+
+
 }
 
 
 
 // private slots
+
+//
+// Open File Dialog Window
+//
 
 void MainWindow::showOpenDialog()
 {
@@ -56,14 +70,19 @@ void MainWindow::showOpenDialog()
     QFileDialog dialog(this);
     QStringList filter;
     filter.append("All Files (*)");
-    dialog.setDirectory("");
+    dialog.setDirectory(g_directoryManager->getDirectory());
     dialog.setNameFilters(filter);
     dialog.setWindowTitle("Open File");
     dialog.setWindowModality(Qt::ApplicationModal);
-    connect(&dialog, &QFileDialog::fileSelected, directoryManager, &DirectoryManager::dirReceived);
+    connect(&dialog, &QFileDialog::fileSelected, g_directoryManager, &DirectoryManager::dirReceived);
     dialog.exec();
 }
 
+void MainWindow::showImage(std::shared_ptr<Image> image)
+{
+//    qDebug()<< centralWidget;
+    centralWidget->showImage(image->getPixmap());
+}
 
 // Protected Events
 

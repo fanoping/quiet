@@ -34,5 +34,5 @@ void ContextMenuItem::mousePressEvent(QMouseEvent *event)
 
 void ContextMenuItem::connectAction()
 {
-     connect(this, &ContextMenuItem::onPressed, actionManager, &ActionManager::actionReceived);
+     connect(this, &ContextMenuItem::onPressed, g_actionManager, &ActionManager::actionReceived);
 }

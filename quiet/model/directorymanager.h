@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include "object/fsentry.h"
+#include "imagemanager.h"
 
 class DirectoryManager : public QObject
 {
@@ -17,16 +18,17 @@ public:
 
     ~DirectoryManager();
 
+    QString getDirectory() { return m_directory; }
     bool setDirectory(QString dir);
 
 private:
     explicit DirectoryManager(QObject *parent = 0);
     // Current Directory
-    QString _directory;
+    QString m_directory;
 
     // Store loaded entryList (file / directory)
     // TODO: currently only first layer
-    QList<FSEntry> _fileEntryList;
+    QList<FSEntry> m_fileEntryList;
 
 
     // load entry list from directory
@@ -37,6 +39,6 @@ public slots:
 };
 
 
-extern DirectoryManager* directoryManager;
+extern DirectoryManager* g_directoryManager;
 
 #endif // DIRECTORYMANAGER_H

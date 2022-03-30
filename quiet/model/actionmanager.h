@@ -47,6 +47,6 @@ private slots:
 
 
 
-extern ActionManager* actionManager;
+extern ActionManager* g_actionManager;
 
 #endif // ACTIONMANAGER_H

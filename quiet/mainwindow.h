@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QDir>
 #include <QHBoxLayout>
+#include <QDebug>
 
 
 #include "view/centralwidget.h"
@@ -41,6 +42,8 @@ private:
     void open(QString fileName);
 
 
+
+
     QLabel* imgLabel;
     QScrollArea *scrollArea;
 
@@ -72,13 +75,13 @@ signals:
     void onOpenSelectedAction(const QString&);
 
 
-//public slots:
-//     void openDialog();
-//     void next();
-//     void prev();
+
 
 public slots:
     void showOpenDialog();
+    void showImage(std::shared_ptr<Image> image);
+
+
 
 protected:
     void mousePressEvent(QMouseEvent *event);

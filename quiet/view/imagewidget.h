@@ -13,13 +13,15 @@ class ImageWidget : public QWidget
 public:
     explicit ImageWidget(QWidget *parent = 0);
 
+    void showImage(std::shared_ptr<QPixmap> image);
+
 signals:
 
 public slots:
 
 private:
-    QVBoxLayout layout;
-    std::shared_ptr<ImagePanel>  imagePanel;
+    QVBoxLayout m_layout;
+    std::shared_ptr<ImagePanel> m_imagePanel;
 
 
 };

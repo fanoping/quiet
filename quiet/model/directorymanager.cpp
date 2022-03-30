@@ -4,46 +4,45 @@
 // Constructor/Destructor
 //
 
-DirectoryManager* directoryManager = nullptr;
+DirectoryManager* g_directoryManager = nullptr;
 
-DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent)
+DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent), m_directory("")
 {
 
 }
 
 DirectoryManager::~DirectoryManager()
 {
-    delete directoryManager;
+    delete g_directoryManager;
 }
 
 DirectoryManager* DirectoryManager::getInstance()
 {
-    if (!directoryManager) {
-        directoryManager = new DirectoryManager();
+    if (!g_directoryManager) {
+        g_directoryManager = new DirectoryManager();
     }
-    return directoryManager;
+    return g_directoryManager;
 }
 
 //
 // Public Methods
 //
 
-bool DirectoryManager::setDirectory(QString dirname)
+bool DirectoryManager::setDirectory(QString path)
 {
-    if(dirname.isEmpty()) {
-        qDebug() << "[Debug] DirectoryManager.cpp - Directory name is empty";
-        return false;
-    }
-    if(!QDir(dirname).exists()){
-        qDebug() << "[Debug] DirectoryManager.cpp - Directory name does not exists";
+    if(path.isEmpty()) {
+        qDebug() << "[Debug] DirectoryManager.cpp - Path is empty";
         return false;
     }
 
-    _directory = dirname;
-    loadEntryList(dirname);
+    m_directory = QFileInfo(path).absolutePath();
+    loadEntryList(m_directory);
 
-    qDebug() << "[Debug] DirectoryManager.cpp - Directory" <<  dirname  << "loaded";
+    // load file
+    g_imageManager->load(path);
 
+
+    qDebug() << "[Debug] DirectoryManager.cpp - Directory" <<  m_directory << "loaded";
     return true;
 }
 
@@ -51,10 +50,10 @@ bool DirectoryManager::setDirectory(QString dirname)
 
 void DirectoryManager::loadEntryList(QString dir)
 {
-    qDebug() << "[DirectoryManager.cpp] file entry list cleared";
-    _fileEntryList.clear();
+    qDebug() << "[Debug] DirectoryManager.cpp - m_fileEntryList cleared";
+    m_fileEntryList.clear();
 
-    QDir directory(_directory);
+    QDir directory(m_directory);
     QStringList files = directory.entryList();
     foreach (QString filename, files) {
        // ignore "." (hidden files)
@@ -67,17 +66,21 @@ void DirectoryManager::loadEntryList(QString dir)
        }
        else {
            FSEntry newEntry(fullpath);
-           _fileEntryList.append(newEntry);
-
+           m_fileEntryList.append(newEntry);
+//           g_imageManager->load(fullpath);
        }
     }
-    qDebug() << "[Debug] DirectoryManager.cpp - " << _fileEntryList.length() << "files loaded";
+    qDebug() << "[Debug] DirectoryManager.cpp - " << m_fileEntryList.length() << "files loaded";
 }
 
 
 // public slots
 
-void DirectoryManager::dirReceived(const QString &)
+void DirectoryManager::dirReceived(const QString &path)
 {
-    qDebug() <<"dirReceived";
+    qDebug() << "[Debug] DirectoryManager.cpp - Selected path:" << path;
+
+    setDirectory(path);
+
+
 }

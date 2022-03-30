@@ -38,7 +38,8 @@ HEADERS  += \
     model/loadimagetask.h \
     model/actionmanager.h \
     view/contextmenu.h \
-    view/contextmenuitem.h
+    view/contextmenuitem.h \
+    util/constants.h
 
 FORMS += \
     view/contextmenu.ui
