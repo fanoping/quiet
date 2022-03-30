@@ -43,11 +43,3 @@ void ContextMenu::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
     this->hide();
 }
-
-void ContextMenu::paintEvent(QPaintEvent *event)
-{
-    QStyleOption option;
-    option.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
-}

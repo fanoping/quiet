@@ -31,6 +31,9 @@ private:
 
     // load entry list from directory
     void loadEntryList(QString dir);
+
+public slots:
+    void dirReceived(const QString&);
 };
 
 

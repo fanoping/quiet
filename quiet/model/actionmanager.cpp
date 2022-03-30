@@ -15,22 +15,16 @@ ActionManager* ActionManager::getInstance()
 {
     if (!actionManager) {
         actionManager = new ActionManager();
-        initActions();
+
         initShortCuts();
     }
     return actionManager;
 }
 
 // private
-void ActionManager::initActions()
-{
-    QAction* openAction = new QAction(tr("Open"), 0);
-    actionManager->_actions.insert("open", openAction);
-}
-
 void ActionManager::initShortCuts()
 {
-    actionManager->_shortcuts.insert("open", "Ctrl+O");
+    actionManager->m_shortcuts.insert("Ctrl+O", "open");
 }
 
 
@@ -51,14 +45,6 @@ bool ActionManager::actionReceived(const QString &actionName)
 
 }
 
-//bool ActionManager::actionReceived(const QString &actionName, const QString &fileName)
-//{
-//    // true: action invoked
-//    // false: invoke failed
-//    qDebug() << actionName <<"with filename" << fileName;
-//    return QMetaObject::invokeMethod(this, (actionName + "Received").toLatin1().constData(), Qt::DirectConnection);
-
-//}
 
 // private slots
 

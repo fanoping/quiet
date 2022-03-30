@@ -36,13 +36,12 @@ private:
     void connectAction();
 
 signals:
-    void onPressed(const QString&);
+    void onPressed(const QString& actionName);
 
 public slots:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent* event);
 };
 
 #endif // CONTEXTMENUITEM_H

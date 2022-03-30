@@ -29,13 +29,7 @@ void ContextMenuItem::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void ContextMenuItem::paintEvent(QPaintEvent *event)
-{
-    QStyleOption option;
-    option.initFrom(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
-}
+
 
 
 void ContextMenuItem::connectAction()

@@ -73,3 +73,11 @@ void DirectoryManager::loadEntryList(QString dir)
     }
     qDebug() << "[Debug] DirectoryManager.cpp - " << _fileEntryList.length() << "files loaded";
 }
+
+
+// public slots
+
+void DirectoryManager::dirReceived(const QString &)
+{
+    qDebug() <<"dirReceived";
+}

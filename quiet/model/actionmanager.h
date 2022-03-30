@@ -15,16 +15,14 @@ public:
     static ActionManager* getInstance();
     ~ActionManager();
 
-    QAction* getAction(const QString& actionName) { return _actions[actionName]; }
+    QString getActionName(const QString& shortcut) { return m_shortcuts[shortcut]; }
 
 private:
     explicit ActionManager(QObject *parent = 0);
-    QMap<QString, QAction*> _actions;   // <actionName, actions>
-    QMap<QString, QString> _shortcuts;  // <actionName, shortcut>
+    QMap<QString, QString> m_shortcuts;  // <shortcut, actionName>
 
 
     // initialization
-    static void initActions();
     static void initShortCuts();
 
 
@@ -38,7 +36,7 @@ signals:
 
 public slots:
     bool actionReceived(const QString &actionName);
-//    bool actionReceived(const QString &actionName, const QString& fileName);
+
 
 private slots:
     void openActionReceived();

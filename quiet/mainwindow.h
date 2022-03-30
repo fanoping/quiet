@@ -18,23 +18,26 @@
 
 
 
-//namespace Ui {
-//class MainWindow;
-//}
+
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    static MainWindow* getInstance();
+
     ~MainWindow();
 
     void changeDir(QString dir);
 
-
+    void initConnect();
 
 private:
+     explicit MainWindow(QWidget *parent = 0);
+
+
+
     void open(QString fileName);
 
 
@@ -81,5 +84,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
 };
+
+extern MainWindow* g_mainWindow;
 
 #endif // MAINWINDOW_H

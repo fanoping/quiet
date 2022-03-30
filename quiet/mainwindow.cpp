@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 
 
+MainWindow* g_mainWindow = nullptr;
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -18,30 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     centralWidget.reset(new CentralWidget(this));
 
-
-    // connect
-
-//    actionManager->invokeAction("open");
-//    actionManager->invokeAction("close");
-//    imgLabel = new QLabel;
-//    imgLabel->setBackgroundRole(QPalette::Base);
-//    imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-//    imgLabel->setScaledContents(true);
-
-//    scrollArea = new QScrollArea;
-//    scrollArea->setWidget(imgLabel);
-//    setCentralWidget(scrollArea);
-
-
-//    createMenus();
-
-//    changeDir("C:/Users/sam18/Downloads/Img");
-
-//    filters << "*.bmp";
-//    currentDir.setNameFilters(filters);
-
-//    setWindowTitle("QUIET v0.0.1");
-//    resize(500, 500);
 }
 
 MainWindow::~MainWindow()
@@ -50,9 +29,22 @@ MainWindow::~MainWindow()
 
 }
 
+MainWindow* MainWindow::getInstance()
+{
+    if(!g_mainWindow) {
+        g_mainWindow = new MainWindow();
+
+    }
+    return g_mainWindow;
+}
 
 
 
+void MainWindow::initConnect()
+{
+    qDebug()<<"connect";
+    connect(actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
+}
 
 
 
@@ -60,7 +52,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::showOpenDialog()
 {
-    qDebug() << "open dialog triggered";
+    qDebug() << "[DEBUG] MainWindow.cpp - Open dialog triggered";
     QFileDialog dialog(this);
     QStringList filter;
     filter.append("All Files (*)");
@@ -68,7 +60,7 @@ void MainWindow::showOpenDialog()
     dialog.setNameFilters(filter);
     dialog.setWindowTitle("Open File");
     dialog.setWindowModality(Qt::ApplicationModal);
-    connect(&dialog, &QFileDialog::fileSelected, this, &MainWindow::onOpenSelectedAction);
+    connect(&dialog, &QFileDialog::fileSelected, directoryManager, &DirectoryManager::dirReceived);
     dialog.exec();
 }
 
@@ -79,7 +71,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
 
     if(event->button() == Qt::RightButton)  {
-        qDebug() << "Right Button Pressed";
         if(!contextMenu) {
             contextMenu.reset(new ContextMenu(this));
         }
@@ -88,8 +79,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             QPoint pos = cursor().pos();
             contextMenu->showAt(pos);
         }
-
         event->accept();
 //        emit onOpenAction("open");
     }
 }
+
