@@ -23,14 +23,17 @@ public:
     void initConnect();
 
 private:
+    QGraphicsScene* m_scene;
+    QGraphicsPixmapItem m_pixmapItem;
     std::unique_ptr<QPixmap> m_pixmap;
 
 
-    QGraphicsScene* m_scene;
 
-    QGraphicsPixmapItem m_pixmapItem;
+
+
 
 signals:
+
 
 public slots:
     void showImage(std::shared_ptr<Image> image);
