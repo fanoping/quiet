@@ -11,9 +11,13 @@ class ImageWidget : public QWidget
 {
     Q_OBJECT
 public:
+    // initialization
     explicit ImageWidget(QWidget *parent = 0);
+    ~ImageWidget();
 
-    void showImage(std::shared_ptr<QPixmap> image);
+    // initialize connection
+    void initConnect();
+
 
 signals:
 
@@ -21,7 +25,7 @@ public slots:
 
 private:
     QVBoxLayout m_layout;
-    std::shared_ptr<ImagePanel> m_imagePanel;
+    std::unique_ptr<ImagePanel> m_imagePanel;
 
 
 };

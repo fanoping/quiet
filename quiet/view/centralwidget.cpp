@@ -8,6 +8,8 @@ CentralWidget::CentralWidget(QWidget *parent) : QStackedWidget(parent)
 
     // initial view in image panel
     toggleWidget(VIEW_IMAGE);
+
+    initConnect();
 }
 
 CentralWidget::~CentralWidget()
@@ -17,13 +19,16 @@ CentralWidget::~CentralWidget()
     }
 }
 
-
-void CentralWidget::showImage(std::shared_ptr<QPixmap> image)
+void CentralWidget::initConnect()
 {
-    qDebug()<<"central";
-    m_imageWidget->showImage(std::move(image));
+    // init connection
 
+    // private members connection
+    m_imageWidget.get()->initConnect();
 }
+
+
+
 
 
 /*

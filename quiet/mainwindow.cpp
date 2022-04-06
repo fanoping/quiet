@@ -1,5 +1,11 @@
 #include "mainwindow.h"
 
+//                                                                      - [ImageWidget]
+//                                                                    |
+// [MainWindow] - [CentralWidget] -
+//                                                                    |
+//                                                                      -
+
 
 MainWindow* g_mainWindow = nullptr;
 
@@ -7,20 +13,14 @@ MainWindow* g_mainWindow = nullptr;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+
     // initialize private member
     // shared pointer methods?
 
-    //                                                                      - [ImageWidget]
-    //                                                                    |
-    // [MainWindow] - [CentralWidget] -
-    //                                                                    |
-    //                                                                      -
-
 
     // MainWindow only controls Central Widget
-
     centralWidget.reset(new CentralWidget(this));
-
+    setCentralWidget(centralWidget.get());
 }
 
 MainWindow::~MainWindow()
@@ -33,11 +33,13 @@ MainWindow* MainWindow::getInstance()
 {
     if(!g_mainWindow) {
         g_mainWindow = new MainWindow();
+        initConnect();
 
     }
     return g_mainWindow;
 }
 
+//MainWindow
 
 //
 // Provide Connection with all other managers (ActionManager, DirectoryManager)
@@ -47,12 +49,13 @@ MainWindow* MainWindow::getInstance()
 void MainWindow::initConnect()
 {
     qDebug() << "[Debug] MainWindow.cpp - Initial Connection";
-
+    qDebug() << g_mainWindow;
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
 
-    connect(g_imageManager, &ImageManager::imageLoaded, g_mainWindow, &MainWindow::showImage);
+//    connect(g_imageManager, &ImageManager::imageLoaded, g_mainWindow, &MainWindow::showImage);
 
+    // private widget members connections
 
 }
 
@@ -78,11 +81,12 @@ void MainWindow::showOpenDialog()
     dialog.exec();
 }
 
-void MainWindow::showImage(std::shared_ptr<Image> image)
-{
-//    qDebug()<< centralWidget;
-    centralWidget->showImage(image->getPixmap());
-}
+//void MainWindow::showImage(std::shared_ptr<Image> image)
+//{
+
+//    qDebug()<<image.get();
+//    centralWidget->showImage(image->getPixmap());
+//}
 
 // Protected Events
 

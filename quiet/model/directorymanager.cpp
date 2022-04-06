@@ -38,6 +38,7 @@ bool DirectoryManager::setDirectory(QString path)
     m_directory = QFileInfo(path).absolutePath();
     loadEntryList(m_directory);
 
+    qDebug() << g_imageManager;
     // load file
     g_imageManager->load(path);
 

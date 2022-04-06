@@ -19,49 +19,27 @@
 
 
 
-
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    // initialization
     static MainWindow* getInstance();
-
     ~MainWindow();
+
+    // initialize connection
+    static void initConnect();
 
     void changeDir(QString dir);
 
-    void initConnect();
+
 
 private:
+     // constructor
      explicit MainWindow(QWidget *parent = 0);
 
 
-
-    void open(QString fileName);
-
-
-
-
-    QLabel* imgLabel;
-    QScrollArea *scrollArea;
-
-    QDir currentDir;
-    int fileNum;
-    QFileInfo fileInfo;
-
-    QStringList fileList;
-    QStringList filters;
-
-    // Action
-    QAction *openAction;
-    QAction *nextAction;
-    QAction *prevAction;
-
-
-    // Menu
-    QMenu * fileMenu;
 
     // Layout Settings
     QHBoxLayout layout;
@@ -79,7 +57,7 @@ signals:
 
 public slots:
     void showOpenDialog();
-    void showImage(std::shared_ptr<Image> image);
+//    void showImage(std::shared_ptr<Image> image);
 
 
 

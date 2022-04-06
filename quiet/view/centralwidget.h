@@ -14,14 +14,17 @@ class CentralWidget : public QStackedWidget
 {
     Q_OBJECT
 public:
+    // initialization
     explicit CentralWidget(QWidget *parent = 0);
     ~CentralWidget();
 
-    void showImage(std::shared_ptr<QPixmap> image);
+    // initialize connection
+    void initConnect();
+
 
 
 private:
-    std::shared_ptr<ImageWidget> m_imageWidget;
+    std::unique_ptr<ImageWidget> m_imageWidget;
     ViewLayer m_viewIndex;
 
 signals:

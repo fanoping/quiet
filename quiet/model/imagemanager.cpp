@@ -29,6 +29,7 @@ void ImageManager::load(QString &path)
     img.reset(new Image(path));
     qDebug() << "img loaded" << path;
     emit imageLoaded(img);
+
 }
 
 //void ImageManager::asyncLoad(QString &path, int priority)

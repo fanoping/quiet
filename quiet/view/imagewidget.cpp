@@ -18,8 +18,14 @@ ImageWidget::ImageWidget(QWidget *parent) : QWidget(parent)
     setLayout(&m_layout);
 }
 
-void ImageWidget::showImage(std::shared_ptr<QPixmap> image)
+ImageWidget::~ImageWidget()
 {
-   qDebug()<<"centrala";
-    m_imagePanel->showImage(std::move(image));
+
 }
+
+void ImageWidget::initConnect()
+{
+    // private widgets initialization
+    m_imagePanel.get()->initConnect();
+}
+
