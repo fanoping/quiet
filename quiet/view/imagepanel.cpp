@@ -57,7 +57,7 @@ void ImagePanel::zoomIn()
 {
    qDebug() << m_scale;
    if(underMouse()) {
-       m_scale = m_scale * 1.1;
+       m_scale = m_scale * 1.1;  // Move out scaling parameter
        m_pixmapItem.setScale(m_scale);
 
        QPointF c = m_pixmapItem.mapFromScene(mapToScene(mapFromGlobal(cursor().pos())));
@@ -94,16 +94,14 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
      * - angleDelta: https://doc.qt.io/qt-5/qwheelevent.html#angleDelta
      *
      * ------------------------------------
-     * Windows
-     *     wheel:
+     *  wheel:
      *           pixelDelta: (0, 0) ... always 0
      *           angleDelta: (0, +/-120) ... (outwards: +120, inwards: -120)
      * ------------------------------------
      */
 
     if( event->modifiers() & Qt::ShiftModifier){
-        qDebug() << event->pixelDelta().x();
-        m_pixmapItem.setScale(2.0);
+
     } else if ( event->modifiers() == Qt::ControlModifier) {
         event->accept();
         int deltaY = event->angleDelta().ry();

@@ -19,8 +19,8 @@ public:
     std::shared_ptr<QImage> getSourceImage() { return m_image; }
 
     // boolean
-    bool isLoaded() { return _isLoaded; }
-    bool isEdited() { return _isEdited; }
+    bool isLoaded() { return m_bIsLoaded; }
+    bool isEdited() { return m_bIsEdited; }
 
     // Image statistics
     int height() { return isEdited() ? m_imageEdited->height() : m_image->height(); }
@@ -37,8 +37,8 @@ private:
     std::shared_ptr<QImage> m_image;
     std::shared_ptr<QImage> m_imageEdited;
 
-    bool _isLoaded;
-    bool _isEdited;
+    bool m_bIsLoaded;
+    bool m_bIsEdited;
 
     // load method
     void load(QString& path);
