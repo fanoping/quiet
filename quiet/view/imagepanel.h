@@ -7,6 +7,7 @@
 #include <memory>
 #include <QDebug>
 #include <QGraphicsView>
+#include <QWheelEvent>
 
 #include "model/imagemanager.h"
 #include "object/image.h"
@@ -27,8 +28,19 @@ private:
     QGraphicsPixmapItem m_pixmapItem;
     std::unique_ptr<QPixmap> m_pixmap;
 
+    // reset before any display method
+    void reset();
 
+    // zoom Event
+    qreal m_scale;
+    void zoomIn();
+    void zoomOut();
 
+//    void centerOn(const QGraphicsItem *item);
+//    void centerOn(qreal x, qreal y);
+
+protected:
+  void wheelEvent(QWheelEvent* event) override;
 
 
 
