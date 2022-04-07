@@ -23,19 +23,19 @@ public:
 
     void load(QString &path);
 
+    // TODO: asynchronous loading
 //    void asyncLoad(QString &path, int priority);
 
 private:
-    QThreadPool* _pool;
-    QHash<QString, LoadImageTask*> _tasks;
+//    QThreadPool* _pool;
+//    QHash<QString, LoadImageTask*> _tasks;
 
 signals:
     void imageLoaded(std::shared_ptr<Image>);
-//    void loadDone(std::shared_ptr<Image> image, const QString &path);
 
 
 private slots:
-//    void onLoadDoneObserved(std::shared_ptr<Image> image, const QString &path);
+
 };
 
 extern ImageManager* g_imageManager;
