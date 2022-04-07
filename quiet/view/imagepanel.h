@@ -33,8 +33,8 @@ private:
 
     // zoom Event
     qreal m_scale;
-    void zoomIn();
-    void zoomOut();
+    void zoom(qreal scaler);
+//    void zoom;
 
 //    void centerOn(const QGraphicsItem *item);
 //    void centerOn(qreal x, qreal y);

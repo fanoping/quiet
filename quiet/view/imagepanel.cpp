@@ -6,7 +6,7 @@ ImagePanel::ImagePanel(QWidget *parent) : QGraphicsView(parent),
 
     // Graphics Scene Setup
     m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(-10000, -10000, 20000, 20000);
+    m_scene->setSceneRect(-1000, -1000, 2000, 2000);
     m_scene->setBackgroundBrush(QColor(0, 0, 0));
     m_scene->addItem(&m_pixmapItem);
 
@@ -53,29 +53,35 @@ void ImagePanel::reset()
 }
 
 
-void ImagePanel::zoomIn()
+void ImagePanel::zoom(qreal scaler)
 {
    qDebug() << m_scale;
+   qDebug() << scaler;
    if(underMouse()) {
-       m_scale = m_scale * 1.1;  // Move out scaling parameter
-       m_pixmapItem.setScale(m_scale);
+       scaler = qMax(scaler, 1.0);  // Move out scaling parameter
+       if ( scaler != m_scale) {
+           m_scale = scaler;
+           m_pixmapItem.setScale(m_scale);
 
-       QPointF c = m_pixmapItem.mapFromScene(mapToScene(mapFromGlobal(cursor().pos())));
-       centerOn(c);
+           QPointF newCenter = mapToScene(mapFromGlobal(cursor().pos()));
+           centerOn(newCenter);
+       }
    }
 }
 
-void ImagePanel::zoomOut()
-{
-   qDebug() << m_scale;
-   if(underMouse()) {
-       m_scale = m_scale / 1.1;
-       m_pixmapItem.setScale(m_scale);
+//void ImagePanel::zoomOut()
+//{
+//   qDebug() << m_scale;
+//   if(underMouse()) {
+//       m_scale = qMax(m_scale/1.1, 1.0);
 
-       QPointF c = m_pixmapItem.mapFromScene(mapToScene(mapFromGlobal(cursor().pos())));
-       centerOn(c);
-   }
-}
+//       m_pixmapItem.setScale(m_scale);
+
+
+//       QPointF c = mapToScene(mapFromGlobal(cursor().pos()));
+//       centerOn(c);
+//   }
+//}
 
 
 /*
@@ -107,16 +113,14 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
         int deltaY = event->angleDelta().ry();
         qDebug() << deltaY;
         if (deltaY > 0) {
-            zoomIn();
+            zoom(m_scale * 1.1);
         } else if (deltaY < 0) {
-            zoomOut();
+            zoom(m_scale / 1.1);
         }
 
     } else {
-        qDebug() << event->pixelDelta().rx();
         event->ignore();
         QGraphicsView::wheelEvent(event);
-
     }
 }
 
@@ -140,7 +144,8 @@ void ImagePanel::showImage(std::shared_ptr<Image> image)
 
     // Center the image at pos (0, 0)
     m_pixmapItem.setOffset(-m_pixmap->width() / 2.0, -m_pixmap->height() / 2.0);
-
+    m_pixmapItem.setTransformOriginPoint(m_pixmapItem.boundingRect().center());
+    m_pixmapItem.setTransformationMode(Qt::SmoothTransformation);
     m_pixmapItem.show();
 
 }

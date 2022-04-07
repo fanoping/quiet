@@ -72,7 +72,7 @@ void MainWindow::showOpenDialog()
     qDebug() << "[DEBUG] MainWindow.cpp - Open dialog triggered";
     QFileDialog dialog(this);
     QStringList filter;
-    filter.append("All Files (*)");
+    filter << "*.bmp";
     dialog.setDirectory(g_directoryManager->getDirectory());
     dialog.setNameFilters(filter);
     dialog.setWindowTitle("Open File");

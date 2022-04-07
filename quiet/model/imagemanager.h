@@ -8,7 +8,7 @@
 #include <QDebug>
 
 #include "object/image.h"
-#include "model/loadimagetask.h"
+
 
 
 

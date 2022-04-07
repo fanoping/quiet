@@ -5,7 +5,7 @@ ImageManager* g_imageManager = nullptr;
 
 ImageManager::ImageManager(QObject *parent) : QObject(parent)
 {
-    _pool = new QThreadPool(this);
+//    _pool = new QThreadPool(this);
 }
 
 ImageManager::~ImageManager()
