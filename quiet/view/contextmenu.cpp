@@ -14,7 +14,9 @@ ContextMenu::ContextMenu(QWidget *parent) :
     ui->open->setAction("openAction");
     ui->open->setText(tr("Open"));
 
-
+//    QAction* newAction = new QAction(this);
+//    newAction->setText(tr("Open"));
+//    this->addAction(newAction);
 }
 
 ContextMenu::~ContextMenu()

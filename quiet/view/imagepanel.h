@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QGraphicsView>
 #include <QWheelEvent>
+#include <QScrollBar>
 
 #include "model/imagemanager.h"
 #include "object/image.h"
@@ -33,11 +34,10 @@ private:
 
     // zoom Event
     qreal m_scale;
-    void zoom(qreal scaler);
-//    void zoom;
+    void zoom(qreal scaler, const QPoint &pos);
 
-//    void centerOn(const QGraphicsItem *item);
-//    void centerOn(qreal x, qreal y);
+
+
 
 protected:
   void wheelEvent(QWheelEvent* event) override;

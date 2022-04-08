@@ -6,18 +6,18 @@ FSEntry::FSEntry()
 
 
 FSEntry::FSEntry(const QString &path):
-    _path(path)
+    m_path(path)
 {
     QFileInfo fileInfo(path);
 
     if (fileInfo.isDir()) {
         qDebug() << "[Debug] FSEntry.cpp - directory constructed";
-         _basename = "";
-         _isDirectory = true;
+        m_basename = "";
+        m_isDirectory = true;
     } else {
          QString basename(fileInfo.baseName());
-         _basename = basename;
-         _isDirectory = false;
+         m_basename = basename;
+         m_isDirectory = false;
     }
 }
 

@@ -8,11 +8,13 @@ DirectoryManager* g_directoryManager = nullptr;
 
 DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent), m_directory("")
 {
-
+    // initialize a dummy root
+    m_fileEntries = new FSEntry();
 }
 
 DirectoryManager::~DirectoryManager()
 {
+    delete m_fileEntries;
     delete g_directoryManager;
 }
 

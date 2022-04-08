@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     model/loadimagetask.cpp \
     model/actionmanager.cpp \
     view/contextmenu.cpp \
-    view/contextmenuitem.cpp
+    view/contextmenuitem.cpp \
+    view/gallarypanel.cpp \
+    object/node.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -39,7 +41,9 @@ HEADERS  += \
     model/actionmanager.h \
     view/contextmenu.h \
     view/contextmenuitem.h \
-    util/constants.h
+    util/constants.h \
+    view/gallarypanel.h \
+    object/node.h
 
 FORMS += \
     view/contextmenu.ui

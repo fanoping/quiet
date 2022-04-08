@@ -49,7 +49,7 @@ MainWindow* MainWindow::getInstance()
 void MainWindow::initConnect()
 {
     qDebug() << "[Debug] MainWindow.cpp - Initial Connection";
-    qDebug() << g_mainWindow;
+    qDebug() << sizeof(g_mainWindow);
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
 
@@ -95,7 +95,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
     if(event->button() == Qt::RightButton)  {
         if(!contextMenu) {
-            contextMenu.reset(new ContextMenu(this));
+             contextMenu.reset(new ContextMenu(this));
         }
 
         if(!contextMenu->isVisible()){
@@ -106,4 +106,5 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 //        emit onOpenAction("open");
     }
 }
+
 

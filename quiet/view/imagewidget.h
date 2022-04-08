@@ -28,6 +28,7 @@ private:
     std::unique_ptr<ImagePanel> m_imagePanel;
 
 
+
 };
 
 #endif // IMAGEWIDGET_H

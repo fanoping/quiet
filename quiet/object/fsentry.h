@@ -12,19 +12,22 @@ public:
     FSEntry(const QString& path);
 
 
+
     bool FSEntry::operator==(FSEntry& otherEntry) {
-        return _path == otherEntry.path();
+        return m_path == otherEntry.path();
     }
     bool FSEntry::operator==(const QString& otherPath) const {
-        return _path == otherPath;
+        return m_path == otherPath;
     }
 
-    QString path() const { return _path; }
+    QString path() const { return m_path; }
 
 private:
-    QString _basename;
-    QString _path;
-    bool _isDirectory;
+    // filepath info
+    QString m_basename;
+    QString m_path;
+    bool m_isDirectory;
+
 
 };
 

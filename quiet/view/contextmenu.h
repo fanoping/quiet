@@ -5,6 +5,7 @@
 #include <QMenu>
 #include <QDebug>
 #include <QPainter>
+#include <QAction>
 
 namespace Ui {
 class ContextMenu;

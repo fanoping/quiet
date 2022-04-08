@@ -30,6 +30,9 @@ private:
     // TODO: currently only first layer
     QList<FSEntry> m_fileEntryList;
 
+    // Tree Structure
+    FSEntry* m_fileEntries;
+
 
     // load entry list from directory
     void loadEntryList(QString dir);

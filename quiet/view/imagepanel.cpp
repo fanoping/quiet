@@ -53,7 +53,7 @@ void ImagePanel::reset()
 }
 
 
-void ImagePanel::zoom(qreal scaler)
+void ImagePanel::zoom(qreal scaler, const QPoint &pos)
 {
    qDebug() << m_scale;
    qDebug() << scaler;
@@ -63,25 +63,15 @@ void ImagePanel::zoom(qreal scaler)
            m_scale = scaler;
            m_pixmapItem.setScale(m_scale);
 
-           QPointF newCenter = mapToScene(mapFromGlobal(cursor().pos()));
-           centerOn(newCenter);
+           QPointF scenePos = mapToScene(pos);
+           QPointF move = mapFromScene(scenePos) - pos;
+           qDebug() << "Move" << move;
+//           centerOn(newCenter);
+           horizontalScrollBar()->setValue(move.x() + horizontalScrollBar()->value());
+           verticalScrollBar()->setValue(move.y() + verticalScrollBar()->value());
        }
    }
 }
-
-//void ImagePanel::zoomOut()
-//{
-//   qDebug() << m_scale;
-//   if(underMouse()) {
-//       m_scale = qMax(m_scale/1.1, 1.0);
-
-//       m_pixmapItem.setScale(m_scale);
-
-
-//       QPointF c = mapToScene(mapFromGlobal(cursor().pos()));
-//       centerOn(c);
-//   }
-//}
 
 
 /*
@@ -106,6 +96,20 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
      * ------------------------------------
      */
 
+
+    //
+    qDebug() << cursor().pos();
+    qDebug() << mapFromGlobal(cursor().pos());
+    qDebug() <<this->mapToGlobal(this->pos());
+    qDebug() <<event->pos();
+    qDebug() << m_pixmapItem.boundingRect().width();
+    qDebug() << m_pixmapItem.boundingRect().height();
+
+    qDebug() << mapToScene(event->pos());
+
+//    qDebug() <<
+
+
     if( event->modifiers() & Qt::ShiftModifier){
 
     } else if ( event->modifiers() == Qt::ControlModifier) {
@@ -113,9 +117,9 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
         int deltaY = event->angleDelta().ry();
         qDebug() << deltaY;
         if (deltaY > 0) {
-            zoom(m_scale * 1.1);
+            zoom(m_scale * 1.1, event->pos());
         } else if (deltaY < 0) {
-            zoom(m_scale / 1.1);
+            zoom(m_scale / 1.1, event->pos());
         }
 
     } else {
