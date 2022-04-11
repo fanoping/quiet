@@ -8,7 +8,9 @@
 #include <QDebug>
 
 #include "object/fsentry.h"
+#include "object/node.h"
 #include "imagemanager.h"
+#include "util/utils.h"
 
 class DirectoryManager : public QObject
 {
@@ -21,6 +23,15 @@ public:
     QString getDirectory() { return m_directory; }
     bool setDirectory(QString dir);
 
+    // Tree operators
+    void insert(const QString queryStr);
+    void remove(const QString queryStr);
+    void reset();
+    void printTree();  // for debugging
+
+    QList<QString> query(const QString &queryStr=QString(""));
+
+
 private:
     explicit DirectoryManager(QObject *parent = 0);
     // Current Directory
@@ -30,12 +41,12 @@ private:
     // TODO: currently only first layer
     QList<FSEntry> m_fileEntryList;
 
-    // Tree Structure
-    FSEntry* m_fileEntries;
-
-
     // load entry list from directory
     void loadEntryList(QString dir);
+
+    // Tree Structure
+    Node* m_fileEntriesRoot;
+
 
 public slots:
     void dirReceived(const QString&);

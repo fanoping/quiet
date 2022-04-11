@@ -2,6 +2,7 @@
 
 #include "mainwindow.h"
 #include "model/imagemanager.h"
+#include "object/node.h"
 
 
 int main(int argc, char *argv[])
@@ -17,8 +18,14 @@ int main(int argc, char *argv[])
 
     g_mainWindow = MainWindow::getInstance();
 
+    // debug
+
+    Node* n = new Node();
+    qDebug() << n->isValid();
+    qDebug() << n->key();
 
     g_mainWindow->show();
+//    g_mainWindow->close();
 
     return a.exec();
 }

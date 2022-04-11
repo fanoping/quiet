@@ -43,7 +43,8 @@ HEADERS  += \
     view/contextmenuitem.h \
     util/constants.h \
     view/gallarypanel.h \
-    object/node.h
+    object/node.h \
+    util/utils.h
 
 FORMS += \
     view/contextmenu.ui

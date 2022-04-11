@@ -9,12 +9,12 @@ DirectoryManager* g_directoryManager = nullptr;
 DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent), m_directory("")
 {
     // initialize a dummy root
-    m_fileEntries = new FSEntry();
+    m_fileEntriesRoot = new Node();
 }
 
 DirectoryManager::~DirectoryManager()
 {
-    delete m_fileEntries;
+    delete m_fileEntriesRoot;
     delete g_directoryManager;
 }
 
@@ -49,12 +49,64 @@ bool DirectoryManager::setDirectory(QString path)
     return true;
 }
 
+/*
+ * Tree operators
+ */
+
+void DirectoryManager::insert(const QString queryStr)
+{
+
+}
+
+void DirectoryManager::remove(const QString queryStr)
+{
+
+}
+
+void DirectoryManager::reset()
+{
+    m_fileEntriesRoot->clear();
+}
+
+QList<QString> DirectoryManager::query(const QString &queryStr)
+{
+   if(queryStr.isEmpty()) {
+       return m_fileEntriesRoot->traverse();
+   }
+   // search before query
+   Node* queryNode = nullptr;
+   QString tmp(queryStr); // copy
+   if(!m_fileEntriesRoot->search(tmp, queryNode)) {
+        qDebug().noquote() << "Filename"  <<  queryStr << "not found";
+       return QList<QString>();
+   }
+
+   QList<QString>queryResult = queryNode->traverse();
+   if(queryNode->isValid()) {
+       queryResult.append(queryStr);
+   }
+   for( int index=0; index< queryResult.count(); ++index) {
+       queryResult[index] = queryStr + queryResult[index];
+   }
+
+   return queryResult;
+}
+
+void DirectoryManager::printTree()
+{
+   m_fileEntriesRoot->print();
+}
+
+
 // Private Methods
 
 void DirectoryManager::loadEntryList(QString dir)
 {
     qDebug() << "[Debug] DirectoryManager.cpp - m_fileEntryList cleared";
     m_fileEntryList.clear();
+
+    // tree clear
+    m_fileEntriesRoot->clear();
 
     QDir directory(m_directory);
     QStringList files = directory.entryList();
@@ -63,6 +115,7 @@ void DirectoryManager::loadEntryList(QString dir)
        if(filename.startsWith(".")) continue;
 
        QString fullpath = dir + "/" + filename;
+       QFileInfo fileInfo(fullpath);
 
        if (QFileInfo(fullpath).isDir()) {
            // Directory, currently ignored
@@ -70,10 +123,23 @@ void DirectoryManager::loadEntryList(QString dir)
        else {
            FSEntry newEntry(fullpath);
            m_fileEntryList.append(newEntry);
+
+           // Tree
+           QString basename(fileInfo.baseName());
+           qDebug() << "basename" << basename;
+           m_fileEntriesRoot->insert(basename);
+
 //           g_imageManager->load(fullpath);
        }
     }
     qDebug() << "[Debug] DirectoryManager.cpp - " << m_fileEntryList.length() << "files loaded";
+    printTree();
+
+    QList<QString> fileEntry = query(QString("gl"));
+    foreach (QString item, fileEntry) {
+        qDebug() <<item;
+    }
+
 }
 
 
