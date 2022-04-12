@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "view/imagepanel.h"
+#include "view/gallarypanel.h"
 
 class ImageWidget : public QWidget
 {
@@ -24,10 +25,9 @@ signals:
 public slots:
 
 private:
-    QVBoxLayout m_layout;
+    QHBoxLayout m_layout;
     std::unique_ptr<ImagePanel> m_imagePanel;
-
-
+    std::unique_ptr<GallaryPanel> m_gallaryPanel;
 
 };
 

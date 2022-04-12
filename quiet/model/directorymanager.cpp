@@ -41,8 +41,7 @@ bool DirectoryManager::setDirectory(QString path)
     loadEntryList(m_directory);
 
     qDebug() << g_imageManager;
-    // load file
-    g_imageManager->load(path);
+
 
 
     qDebug() << "[Debug] DirectoryManager.cpp - Directory" <<  m_directory << "loaded";
@@ -128,8 +127,6 @@ void DirectoryManager::loadEntryList(QString dir)
            QString basename(fileInfo.baseName());
            qDebug() << "basename" << basename;
            m_fileEntriesRoot->insert(basename);
-
-//           g_imageManager->load(fullpath);
        }
     }
     qDebug() << "[Debug] DirectoryManager.cpp - " << m_fileEntryList.length() << "files loaded";
@@ -150,6 +147,7 @@ void DirectoryManager::dirReceived(const QString &path)
     qDebug() << "[Debug] DirectoryManager.cpp - Selected path:" << path;
 
     setDirectory(path);
-
+    // load file
+    g_imageManager->load(path);
 
 }

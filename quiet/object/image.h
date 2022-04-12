@@ -10,7 +10,7 @@
 class Image
 {
 public:
-    Image(QString& path);
+    Image(const QString& path);
     ~Image();
 
     // getters
@@ -41,7 +41,7 @@ private:
     bool m_bIsEdited;
 
     // load method
-    void load(QString& path);
+    void load(const QString& path);
 
 };
 

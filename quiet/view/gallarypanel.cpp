@@ -9,3 +9,13 @@ GallaryPanel::GallaryPanel(QWidget *parent) : QGraphicsView(parent)
 
 }
 
+GallaryPanel::~GallaryPanel()
+{
+
+}
+
+
+void GallaryPanel::initConnect()
+{
+
+}

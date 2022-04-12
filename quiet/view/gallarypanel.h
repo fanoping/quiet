@@ -10,10 +10,13 @@ class GallaryPanel : public QGraphicsView
     Q_OBJECT
 public:
     explicit GallaryPanel(QWidget *parent = 0);
+    ~GallaryPanel();
 
+    void initConnect();
 
 private:
     QGraphicsScene* m_scene;
+
 
 signals:
 

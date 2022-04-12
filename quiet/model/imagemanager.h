@@ -21,7 +21,7 @@ public:
     ~ImageManager();
 
 
-    void load(QString &path);
+    void load(const QString &path);
 
     // TODO: asynchronous loading
 //    void asyncLoad(QString &path, int priority);

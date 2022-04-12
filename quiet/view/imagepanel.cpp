@@ -98,16 +98,15 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
 
 
     //
-    qDebug() << cursor().pos();
-    qDebug() << mapFromGlobal(cursor().pos());
-    qDebug() <<this->mapToGlobal(this->pos());
-    qDebug() <<event->pos();
-    qDebug() << m_pixmapItem.boundingRect().width();
-    qDebug() << m_pixmapItem.boundingRect().height();
+//    qDebug() << cursor().pos();
+//    qDebug() << mapFromGlobal(cursor().pos());
+//    qDebug() <<this->mapToGlobal(this->pos());
+//    qDebug() <<event->pos();
+//    qDebug() << m_pixmapItem.boundingRect().width();
+//    qDebug() << m_pixmapItem.boundingRect().height();
 
-    qDebug() << mapToScene(event->pos());
+//    qDebug() << mapToScene(event->pos());
 
-//    qDebug() <<
 
 
     if( event->modifiers() & Qt::ShiftModifier){

@@ -1,7 +1,7 @@
 #include "image.h"
 
 
-Image::Image(QString &path) :  m_bIsLoaded(false), m_bIsEdited(false)
+Image::Image(const QString &path) :  m_bIsLoaded(false), m_bIsEdited(false)
 {
     load(path);
 }
@@ -20,7 +20,7 @@ std::unique_ptr<QPixmap> Image::getPixmap()
     return pixmap;
 }
 
-void Image::load(QString& path)
+void Image::load(const QString& path)
 {
     // Load Image
 

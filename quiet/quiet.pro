@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     view/contextmenu.cpp \
     view/contextmenuitem.cpp \
     view/gallarypanel.cpp \
-    object/node.cpp
+    object/node.cpp \
+    view/gallaryitem.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS  += \
     util/constants.h \
     view/gallarypanel.h \
     object/node.h \
-    util/utils.h
+    util/utils.h \
+    view/gallaryitem.h
 
 FORMS += \
     view/contextmenu.ui

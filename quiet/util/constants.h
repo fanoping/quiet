@@ -6,7 +6,15 @@ enum ViewLayer {
     VIEW_DIRECTORY
 };
 
-
+enum Edges {
+    ALL,
+    TOP,
+    BOTTOM,
+    LEADING,
+    TRAILING,
+    VERTICAL,
+    HORIZONTAL
+};
 
 #endif // CONSTANTS
 

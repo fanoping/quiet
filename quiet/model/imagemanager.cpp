@@ -23,7 +23,7 @@ ImageManager* ImageManager::getInstance()
 
 
 
-void ImageManager::load(QString &path)
+void ImageManager::load(const QString &path)
 {
     std::shared_ptr<Image> img = nullptr;
     img.reset(new Image(path));
