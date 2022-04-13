@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QGraphicsView>
 
+#include "view/gallaryitem.h"
+#include "util/constants.h"
 
 class GallaryPanel : public QGraphicsView
 {
@@ -14,13 +16,28 @@ public:
 
     void initConnect();
 
+    // TODO: GallaryItem positioning
+
+    void loadVisibleThumbnails();
+
 private:
     QGraphicsScene* m_scene;
+    QList<GallaryItem*> m_gallaryItems;
 
+
+//    // Temporary Data for development
+//    QList<QGraphicsPixmapItem*> tmpData;
+
+    // Scrolling Preload
+    int offsetPreloadRange = 1024;
+    ScrollDirection previousScollDirection = SCROLL_INWARDS;
 
 signals:
 
 public slots:
+
+
+
 };
 
 #endif // GALLARYPANEL_H

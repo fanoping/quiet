@@ -25,7 +25,7 @@ signals:
 public slots:
 
 private:
-    QHBoxLayout m_layout;
+    QVBoxLayout m_layout;
     std::unique_ptr<ImagePanel> m_imagePanel;
     std::unique_ptr<GallaryPanel> m_gallaryPanel;
 

@@ -16,5 +16,10 @@ enum Edges {
     HORIZONTAL
 };
 
+enum ScrollDirection {
+    SCROLL_INWARDS,        // angle -120
+    SCROLL_OUTWARDS    // angle +120
+};
+
 #endif // CONSTANTS
 

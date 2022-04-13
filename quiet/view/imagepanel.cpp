@@ -26,7 +26,7 @@ ImagePanel::ImagePanel(QWidget *parent) : QGraphicsView(parent),
 
 ImagePanel::~ImagePanel()
 {
-
+    delete m_scene;
 }
 
 /*

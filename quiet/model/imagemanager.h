@@ -23,12 +23,12 @@ public:
 
     void load(const QString &path);
 
-    // TODO: asynchronous loading
-//    void asyncLoad(QString &path, int priority);
 
 private:
-//    QThreadPool* _pool;
-//    QHash<QString, LoadImageTask*> _tasks;
+    // HashMap image caching
+    int m_cacheSize;
+    std::shared_ptr<Image*> m_imageCache;
+
 
 signals:
     void imageLoaded(std::shared_ptr<Image>);

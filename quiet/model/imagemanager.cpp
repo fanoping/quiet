@@ -3,8 +3,11 @@
 
 ImageManager* g_imageManager = nullptr;
 
-ImageManager::ImageManager(QObject *parent) : QObject(parent)
+ImageManager::ImageManager(QObject *parent) :
+    QObject(parent),
+    m_cacheSize(64)
 {
+    m_imageCache.reset(new Image*[m_cacheSize]);
 //    _pool = new QThreadPool(this);
 }
 

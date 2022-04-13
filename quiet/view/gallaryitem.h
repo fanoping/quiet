@@ -18,7 +18,7 @@ public:
      *
      * TODO:
      * Reimplement methods:
-     * - Protected:　https://doc.qt.io/qt-5/qgraphicswidget.html#reimplemented-protected-functions
+     * - Protected: https://doc.qt.io/qt-5/qgraphicswidget.html#reimplemented-protected-functions
      * - Public: https://doc.qt.io/qt-5/qgraphicswidget.html#reimplemented-public-functions
      *
      */

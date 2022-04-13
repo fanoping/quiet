@@ -21,7 +21,6 @@ SOURCES += main.cpp\
     object/fsentry.cpp \
     model/imagemanager.cpp \
     object/image.cpp \
-    model/loadimagetask.cpp \
     model/actionmanager.cpp \
     view/contextmenu.cpp \
     view/contextmenuitem.cpp \
@@ -38,7 +37,6 @@ HEADERS  += \
     object/fsentry.h \
     model/imagemanager.h \
     object/image.h \
-    model/loadimagetask.h \
     model/actionmanager.h \
     view/contextmenu.h \
     view/contextmenuitem.h \

@@ -10,6 +10,7 @@
 class Image
 {
 public:
+    Image();
     Image(const QString& path);
     ~Image();
 
