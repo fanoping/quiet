@@ -9,7 +9,9 @@
 #include <QGraphicsView>
 #include <QWheelEvent>
 #include <QScrollBar>
+#include <QList>
 
+#include "model/directorymanager.h"
 #include "model/imagemanager.h"
 #include "object/image.h"
 
@@ -48,6 +50,7 @@ signals:
 
 
 public slots:
+    void loadImage(const QString&, const QList<QString>&);
     void showImage(std::shared_ptr<Image> image);
 
 };

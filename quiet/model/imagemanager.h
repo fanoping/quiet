@@ -8,8 +8,7 @@
 #include <QDebug>
 
 #include "object/image.h"
-
-
+#include "util/utils.h"
 
 
 class ImageManager : public QObject
@@ -21,13 +20,15 @@ public:
     ~ImageManager();
 
 
-    void load(const QString &path);
+    HashKey load(const QString &path);
 
 
 private:
     // HashMap image caching
     int m_cacheSize;
     std::shared_ptr<Image*> m_imageCache;
+
+    HashKey m_currHashKey;
 
 
 signals:

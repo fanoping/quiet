@@ -5,10 +5,12 @@ ImageManager* g_imageManager = nullptr;
 
 ImageManager::ImageManager(QObject *parent) :
     QObject(parent),
-    m_cacheSize(64)
+    m_cacheSize(64),
+    m_currHashKey(0)
 {
     m_imageCache.reset(new Image*[m_cacheSize]);
-//    _pool = new QThreadPool(this);
+
+
 }
 
 ImageManager::~ImageManager()
@@ -26,13 +28,13 @@ ImageManager* ImageManager::getInstance()
 
 
 
-void ImageManager::load(const QString &path)
+HashKey ImageManager::load(const QString &path)
 {
     std::shared_ptr<Image> img = nullptr;
     img.reset(new Image(path));
     qDebug() << "img loaded" << path;
     emit imageLoaded(img);
-
+    return m_currHashKey++;
 }
 
 //void ImageManager::asyncLoad(QString &path, int priority)

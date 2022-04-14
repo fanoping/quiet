@@ -29,6 +29,10 @@ public:
     QSize size() { return isEdited() ? m_imageEdited->size() : m_image->size(); }
 
 
+
+
+
+
 signals:
 
 public slots:

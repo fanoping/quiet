@@ -34,6 +34,8 @@ MainWindow* MainWindow::getInstance()
     if(!g_mainWindow) {
         g_mainWindow = new MainWindow();
         initConnect();
+        g_mainWindow = new MainWindow();
+        qDebug() << g_mainWindow;
 
     }
     return g_mainWindow;

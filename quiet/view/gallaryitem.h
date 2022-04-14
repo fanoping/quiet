@@ -7,6 +7,7 @@
 
 #include "object/image.h"
 #include "util/constants.h"
+#include "util/utils.h"
 
 
 class GallaryItem : public QGraphicsWidget
@@ -46,8 +47,8 @@ private:
     // geometry modifier
     void updateBoundingRect();
 
-    // content
-    std::unique_ptr<Image> m_image;
+
+
 
 signals:
 

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
     Node* n = new Node();
     qDebug() << n->isValid();
-    qDebug() << n->key();
+    qDebug() << n->getHashKey();
 
     g_mainWindow->show();
 //    g_mainWindow->close();

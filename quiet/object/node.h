@@ -3,11 +3,14 @@
 
 #include <QList>
 #include <QMap>
+#include <QFileInfo>
 #include <QDebug>
 #include "stdint.h"
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+
+#include "util/utils.h"
 
 class Node
 {
@@ -15,30 +18,38 @@ public:
     Node();
     ~Node();
 
-    // flags
+    // Tree Structure Related
+    // node getters / setters
+    void setParent(Node* node) { parent = node; }
+    Node* getParent() const { return parent; }
+
+    // clear child
+    void clear();
+
+    QList<QString> traverse(); //preorder output
+    bool search(QString& fileStr, Node*& queryNode);
+
+    Node* insertChild(const uint8_t childChar);
+
+
+
+    // for debug
+    void print(int level=1);
+
+    // Content Related
+    // Flags from m_value
     bool isValid();
     bool isCached();
     void setValid();
     void setCached();
 
+    // HashKey getter
+    HashKey getHashKey() const;
+    QFileInfo getFileInfo() const;
 
-    // hash key getter
-    uint8_t key();
+    void setHashKey(HashKey key);
+    void setFileInfo(const QFileInfo& fileInfo);
 
-    // node getters / setters
-    void setParent(Node* node) { parent = node; }
-    Node* getParent() { return parent; }
-
-    // clear child
-    void clear();
-
-    void insert(QString str);
-    QList<QString> traverse(); //preorder output
-    bool search(QString& queryString, Node*& queryNode);
-
-
-    // for debug
-    void print(int level=1);
 
 private:
     Node* parent;
@@ -53,6 +64,7 @@ private:
      *
      */
     uint8_t  m_value;
+    QFileInfo m_fileInfo;
 
 };
 

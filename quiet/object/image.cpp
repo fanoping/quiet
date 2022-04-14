@@ -1,6 +1,11 @@
 #include "image.h"
 
 
+Image::Image()
+{
+
+}
+
 Image::Image(const QString &path) :  m_bIsLoaded(false), m_bIsEdited(false)
 {
     load(path);

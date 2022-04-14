@@ -24,12 +24,18 @@ public:
     bool setDirectory(QString dir);
 
     // Tree operators
-    void insert(const QString queryStr);
-    void remove(const QString queryStr);
+
+    void insert(const QString& fileStr, const QFileInfo& fileInfo);
+    void remove(const QString fileStr);
     void reset();
     void printTree();  // for debugging
 
     QList<QString> query(const QString &queryStr=QString(""));
+
+    Node* isValid(const QString &queryImageStr);
+
+    HashKey queryImage(const QString& requestImageStr);
+
 
 
 private:
@@ -39,14 +45,18 @@ private:
 
     // Store loaded entryList (file / directory)
     // TODO: currently only first layer
-    QList<FSEntry> m_fileEntryList;
+//    QList<FSEntry> m_fileEntryList;
 
     // load entry list from directory
-    void loadEntryList(QString dir);
+    QList<QString> loadEntryList(QString dir);
 
     // Tree Structure
     Node* m_fileEntriesRoot;
 
+
+
+signals:
+    void directoryInitialized(const QString&, const QList<QString>&);
 
 public slots:
     void dirReceived(const QString&);

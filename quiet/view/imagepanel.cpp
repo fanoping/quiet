@@ -37,8 +37,13 @@ ImagePanel::~ImagePanel()
 
 void ImagePanel::initConnect()
 {
+    // Connect Directory Initialization
+    connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &ImagePanel::loadImage);
+
     // Connect Loaded Image and Image Display
     connect(g_imageManager, &ImageManager::imageLoaded, this, &ImagePanel::showImage);
+
+
 }
 
 /*
@@ -133,6 +138,12 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
   Public Slots
 
 */
+
+void ImagePanel::loadImage(const QString& mainEntry, const QList<QString>& entryList)
+{
+    g_directoryManager->queryImage(mainEntry);
+}
+
 
 void ImagePanel::showImage(std::shared_ptr<Image> image)
 {
