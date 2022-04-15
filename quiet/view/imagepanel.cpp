@@ -142,6 +142,10 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
 void ImagePanel::loadImage(const QString& mainEntry, const QList<QString>& entryList)
 {
     g_directoryManager->queryImage(mainEntry);
+
+
+//    HashKey key = g_directoryManager->getHashKey(mainEntry);
+
 }
 
 

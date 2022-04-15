@@ -15,7 +15,6 @@ ActionManager* ActionManager::getInstance()
 {
     if (!g_actionManager) {
         g_actionManager = new ActionManager();
-
         initShortCuts();
     }
     return g_actionManager;

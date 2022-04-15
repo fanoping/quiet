@@ -6,6 +6,7 @@
 
 // For debug usage
 #include <QDebug>
+#include <QMessageLogger>
 
 #include "object/fsentry.h"
 #include "object/node.h"
@@ -17,25 +18,26 @@ class DirectoryManager : public QObject
     Q_OBJECT
 public:
     static DirectoryManager* getInstance();
-
     ~DirectoryManager();
 
-    QString getDirectory() { return m_directory; }
-    bool setDirectory(QString dir);
+    QString const & getDirectory() const;
+    void setDirectory(const QString& dir);
 
-    // Tree operators
-
-    void insert(const QString& fileStr, const QFileInfo& fileInfo);
-    void remove(const QString fileStr);
-    void reset();
+    void appendFile(const QString& fileBasename, const QFileInfo& fileInfo);
+    void removeFile(const QString& fileBasename); // TODO
+    void reset(); // TODO
     void printTree();  // for debugging
+
+    QFileInfo getFileInfo(const QString& fileBasename);
+    HashKey getHashKey(const QString& fileBasename);
+    bool isValid(const QString &fileBasename);
+
 
     QList<QString> query(const QString &queryStr=QString(""));
 
-    Node* isValid(const QString &queryImageStr);
+
 
     HashKey queryImage(const QString& requestImageStr);
-
 
 
 private:
@@ -52,6 +54,7 @@ private:
 
     // Tree Structure
     Node* m_fileEntriesRoot;
+    Node* searchNode(const QString& fileBasename);
 
 
 

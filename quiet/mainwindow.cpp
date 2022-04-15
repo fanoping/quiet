@@ -21,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // MainWindow only controls Central Widget
     centralWidget.reset(new CentralWidget(this));
     setCentralWidget(centralWidget.get());
+
+    QMenu* menu = new QMenu(this);
+    menu->show();
+
 }
 
 MainWindow::~MainWindow()
@@ -83,12 +87,7 @@ void MainWindow::showOpenDialog()
     dialog.exec();
 }
 
-//void MainWindow::showImage(std::shared_ptr<Image> image)
-//{
 
-//    qDebug()<<image.get();
-//    centralWidget->showImage(image->getPixmap());
-//}
 
 // Protected Events
 

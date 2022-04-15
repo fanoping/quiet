@@ -31,24 +31,24 @@ DirectoryManager* DirectoryManager::getInstance()
 // Public Methods
 //
 
-bool DirectoryManager::setDirectory(QString path)
+QString const & DirectoryManager::getDirectory() const
 {
-    if(path.isEmpty()) {
-        qDebug() << "[Debug] DirectoryManager.cpp - Path is empty";
-        return false;
-    }
-
-    m_directory = QFileInfo(path).absolutePath();
-    qDebug() << "[Debug] DirectoryManager.cpp - Set directory to" <<  m_directory;
-    return true;
+     return m_directory;
 }
 
-void DirectoryManager::insert(const QString& fileStr, const QFileInfo& fileInfo)
+void DirectoryManager::setDirectory(const QString& dir)
+{
+    m_directory = dir;
+    qDebug() << "[Debug] DirectoryManager.cpp - Set directory to" <<  m_directory;
+}
+
+
+void DirectoryManager::appendFile(const QString& fileBasename, const QFileInfo& fileInfo)
 {
     uint8_t fileChar;
     Node* nodePtr = m_fileEntriesRoot;
-    for(int strIndex=0; strIndex < fileStr.length(); ++strIndex) {
-        fileChar = fileStr[strIndex].toLatin1();
+    for(int strIndex=0; strIndex < fileBasename.length(); ++strIndex) {
+        fileChar = fileBasename[strIndex].toLatin1();
         nodePtr = nodePtr->insertChild(fileChar);
     }
 
@@ -56,7 +56,7 @@ void DirectoryManager::insert(const QString& fileStr, const QFileInfo& fileInfo)
     nodePtr->setFileInfo(fileInfo);
 }
 
-void DirectoryManager::remove(const QString fileStr)
+void DirectoryManager::removeFile(const QString& fileBasename)
 {
 
 }
@@ -64,6 +64,32 @@ void DirectoryManager::remove(const QString fileStr)
 void DirectoryManager::reset()
 {
     m_fileEntriesRoot->clear();
+}
+
+QFileInfo DirectoryManager::getFileInfo(const QString& fileBasename)
+{
+    Node* queryNode = searchNode(fileBasename);
+    return queryNode->getFileInfo();
+}
+
+HashKey DirectoryManager::getHashKey(const QString &fileBasename)
+{
+    Node* queryNode = searchNode(fileBasename);
+    HashKey key;
+
+    if(!queryNode->isCached()) {
+        key = g_imageManager->loadImage(queryNode->getFileInfo());
+    } else {
+        key = queryNode->getHashKey();
+    }
+
+    return key;
+}
+
+bool DirectoryManager::isValid(const QString &fileBasename)
+{
+    Node* queryNode = searchNode(fileBasename);
+    return queryNode->isValid();
 }
 
 QList<QString> DirectoryManager::query(const QString &queryStr)
@@ -107,7 +133,7 @@ HashKey DirectoryManager::queryImage(const QString &queryImageStr)
     // Step 4. View retrieve the Image from HashList in ImageManager
 
     // Step 1
-    Node* queryNode = isValid(queryImageStr);
+    Node* queryNode = searchNode(queryImageStr);
     if(!queryNode) {
         return -1;
     }
@@ -121,20 +147,9 @@ HashKey DirectoryManager::queryImage(const QString &queryImageStr)
     }
 
     return queryNode->getHashKey();
+//    return 0;
 }
 
-
-Node* DirectoryManager::isValid(const QString &queryImageStr)
-{
-
-    Node* queryNode = nullptr;
-    QString tmp(queryImageStr); // copy
-
-     if(!m_fileEntriesRoot->search(tmp, queryNode)) {
-         return nullptr;
-     }
-     return queryNode;
-}
 
 
 
@@ -164,7 +179,7 @@ QList<QString> DirectoryManager::loadEntryList(QString dir)
            QString basename(fileInfo.baseName());
            fileList.append(basename);
            qDebug() << "basename" << fileList;
-           insert(basename, fileInfo);
+           appendFile(basename, fileInfo);
        }
     }
 
@@ -182,7 +197,7 @@ void DirectoryManager::dirReceived(const QString &path)
 {
     qDebug() << "[Debug] DirectoryManager.cpp - Selected path:" << path;
 
-    setDirectory(path);
+    setDirectory(QFileInfo(path).absolutePath());
     QList<QString> entryList = loadEntryList(m_directory);
 
     emit directoryInitialized(QFileInfo(path).baseName(), entryList);
@@ -191,4 +206,15 @@ void DirectoryManager::dirReceived(const QString &path)
     // load file
 //    g_imageManager->load(path);
 
+}
+
+Node* DirectoryManager::searchNode(const QString &fileBasename)
+{
+    Node* queryNode = nullptr;
+    QString tmp(fileBasename);
+
+     if(!m_fileEntriesRoot->search(tmp, queryNode)) {
+         return nullptr;
+     }
+     return queryNode;
 }

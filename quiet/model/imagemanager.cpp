@@ -37,27 +37,9 @@ HashKey ImageManager::load(const QString &path)
     return m_currHashKey++;
 }
 
-//void ImageManager::asyncLoad(QString &path, int priority)
-//{
-//    if( _tasks.contains(path)) return;
+HashKey ImageManager::loadImage(const QFileInfo& fileInfo)
+{
 
-//    auto runnableTask = new LoadImageTask(path);
-//    runnableTask->setAutoDelete(false);
-//    _tasks.insert(path, runnableTask);
-
-//    connect(runnableTask, &LoadImageTask::loadDone, this, &ImageManager::onLoadDoneObserved, Qt::UniqueConnection);
-//    _pool->start(runnableTask, priority);
-//}
-
-
-// signals and slots
-
-//void ImageManager::onLoadDoneObserved(std::shared_ptr<Image> image, const QString &path)
-//{
-//    auto task = _tasks.take(path);
-//    delete task;
-
-//    emit loadDone(image, path);
-//}
-
+    return 0;
+}
 
