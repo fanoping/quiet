@@ -38,7 +38,7 @@ private:
     qreal m_scale;
     void zoom(qreal scaler, const QPoint &pos);
 
-
+    void showImage(HashKey key);
 
 
 protected:
@@ -51,7 +51,6 @@ signals:
 
 public slots:
     void loadImage(const QString&, const QList<QString>&);
-    void showImage(std::shared_ptr<Image> image);
 
 };
 

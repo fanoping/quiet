@@ -25,6 +25,7 @@ public:
     // new ones
     HashKey loadImage(const QFileInfo& fileInfo);
 
+    Image* operator[](HashKey key) { return m_imageCache.get()[key]; }
 
 private:
     // HashMap image caching

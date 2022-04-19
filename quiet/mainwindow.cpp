@@ -59,8 +59,6 @@ void MainWindow::initConnect()
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
 
-//    connect(g_imageManager, &ImageManager::imageLoaded, g_mainWindow, &MainWindow::showImage);
-
     // private widget members connections
 
 }

@@ -2,6 +2,17 @@
 
 GallaryItem::GallaryItem(QGraphicsItem *parent):
     QGraphicsWidget(parent),
+    m_entryStr(""),
+    m_sizeX(100), m_sizeY(100),
+    m_paddingTop(0), m_paddingBottom(0),
+    m_paddingLeading(0), m_paddingTrailing(0)
+{
+
+}
+
+GallaryItem::GallaryItem(const QString& entryStr, QGraphicsItem *parent):
+    QGraphicsWidget(parent),
+    m_entryStr(entryStr),
     m_sizeX(100), m_sizeY(100),
     m_paddingTop(0), m_paddingBottom(0),
     m_paddingLeading(0), m_paddingTrailing(0)
@@ -18,40 +29,6 @@ GallaryItem::~GallaryItem()
 /*
  * Public
  */
-
-void GallaryItem::padding(qreal length, Edges edges)
-{
-    if(length <= 0 ) return;
-
-    switch (edges) {
-    case ALL:
-        m_paddingTop = length;
-        m_paddingBottom = length;
-        m_paddingLeading = length;
-        m_paddingTrailing = length;
-    case TOP:
-        m_paddingTop = length;
-    case BOTTOM:
-        m_paddingBottom = length;
-    case LEADING:
-        m_paddingLeading = length;
-    case TRAILING:
-        m_paddingTrailing = length;
-    case HORIZONTAL:
-        m_paddingLeading = length;
-        m_paddingTrailing = length;
-    case VERTICAL:
-        m_paddingTop = length;
-        m_paddingBottom = length;
-    default:  // Same as Edges.ALL
-        m_paddingTop = length;
-        m_paddingBottom = length;
-        m_paddingLeading = length;
-        m_paddingTrailing = length;
-    }
-
-    updateBoundingRect();
-}
 
 
 void GallaryItem::size(qreal x, qreal y)
@@ -72,10 +49,9 @@ void GallaryItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-
-    // Selected, Hovered Background Painter
-
-
+    HashKey key = g_directoryManager->getHashKey(m_entryStr);
+    m_pixmap = (*g_imageManager)[key]->getPixmap();
+    drawThumbnail(painter);
 }
 
 
@@ -90,3 +66,38 @@ void GallaryItem::updateBoundingRect()
     m_boundingRect.adjust(-m_paddingLeading, -m_paddingTop, m_paddingTrailing, m_paddingBottom);
     m_boundingRect.moveTo(0, 0);
 }
+
+
+void GallaryItem::drawThumbnail(QPainter *painter)
+{
+//    updateBoundingRect();
+    updateDrawPosition();
+    painter->drawPixmap(drawCenter, *(m_pixmap.get()));
+}
+
+
+void GallaryItem::updateDrawPosition()
+{
+    QPoint topleft;
+    QSize pixmapSize;
+
+    pixmapSize = m_pixmap.get()->size();
+
+//    topleft.setX((m_boundingRect.width() - pixmapSize.width()) / 2.0);
+//    topleft.setY((m_boundingRect.height() - pixmapSize.height()) / 2.0);
+
+    topleft.setX(0);
+    topleft.setY(0);
+
+    drawCenter = QRect(topleft, pixmapSize);
+}
+
+//void GallaryItem::showEvent(QShowEvent *event)
+//{
+
+//    HashKey key = g_directoryManager->getHashKey(m_entryStr);
+//    m_pixmap = (*g_imageManager)[key]->getPixmap();
+
+//    m_pixmapItem.setPixmap(*m_pixmap);
+//    m_pixmapItem.show();
+//}

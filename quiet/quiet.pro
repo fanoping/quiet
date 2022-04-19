@@ -18,7 +18,6 @@ SOURCES += main.cpp\
     view/imagewidget.cpp \
     view/imagepanel.cpp \
     model/directorymanager.cpp \
-    object/fsentry.cpp \
     model/imagemanager.cpp \
     object/image.cpp \
     model/actionmanager.cpp \
@@ -26,7 +25,8 @@ SOURCES += main.cpp\
     view/contextmenuitem.cpp \
     view/gallarypanel.cpp \
     object/node.cpp \
-    view/gallaryitem.cpp
+    view/gallaryitem.cpp \
+    util/settings.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -34,7 +34,6 @@ HEADERS  += \
     view/imagewidget.h \
     view/imagepanel.h \
     model/directorymanager.h \
-    object/fsentry.h \
     model/imagemanager.h \
     object/image.h \
     model/actionmanager.h \
@@ -44,7 +43,8 @@ HEADERS  += \
     view/gallarypanel.h \
     object/node.h \
     util/utils.h \
-    view/gallaryitem.h
+    view/gallaryitem.h \
+    util/settings.h
 
 FORMS += \
     view/contextmenu.ui

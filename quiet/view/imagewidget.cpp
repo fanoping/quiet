@@ -15,6 +15,7 @@ ImageWidget::ImageWidget(QWidget *parent) : QWidget(parent)
     m_layout.addWidget(m_gallaryPanel.get());
 
     m_imagePanel->show();
+    qDebug() <<"debug";
     m_gallaryPanel->show();
 
     setLayout(&m_layout);
@@ -29,6 +30,6 @@ void ImageWidget::initConnect()
 {
     // private widgets initialization
     m_imagePanel->initConnect();
-    m_gallaryPanel->initConnect();
+//    m_gallaryPanel->initConnect();
 }
 

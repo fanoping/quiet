@@ -9,12 +9,15 @@ ImageManager::ImageManager(QObject *parent) :
     m_currHashKey(0)
 {
     m_imageCache.reset(new Image*[m_cacheSize]);
-
-
 }
 
 ImageManager::~ImageManager()
 {
+    for(int cacheIndex=0; cacheIndex <m_cacheSize; ++cacheIndex){
+        if(m_imageCache.get()[cacheIndex]) {
+            delete m_imageCache.get()[cacheIndex];
+        }
+    }
     delete g_imageManager;
 }
 
@@ -39,7 +42,9 @@ HashKey ImageManager::load(const QString &path)
 
 HashKey ImageManager::loadImage(const QFileInfo& fileInfo)
 {
-
-    return 0;
+    qDebug() << "load image" << fileInfo.absoluteFilePath();
+    Image* img = new Image(fileInfo.absoluteFilePath());
+    m_imageCache.get()[m_currHashKey] = img;
+    return m_currHashKey++;
 }
 

@@ -8,7 +8,6 @@
 #include <QDebug>
 #include <QMessageLogger>
 
-#include "object/fsentry.h"
 #include "object/node.h"
 #include "imagemanager.h"
 #include "util/utils.h"
@@ -25,7 +24,7 @@ public:
 
     void appendFile(const QString& fileBasename, const QFileInfo& fileInfo);
     void removeFile(const QString& fileBasename); // TODO
-    void reset(); // TODO
+    void reset();
     void printTree();  // for debugging
 
     QFileInfo getFileInfo(const QString& fileBasename);
@@ -37,9 +36,6 @@ public:
 
 
 
-    HashKey queryImage(const QString& requestImageStr);
-
-
 private:
     explicit DirectoryManager(QObject *parent = 0);
     // Current Directory
@@ -47,7 +43,6 @@ private:
 
     // Store loaded entryList (file / directory)
     // TODO: currently only first layer
-//    QList<FSEntry> m_fileEntryList;
 
     // load entry list from directory
     QList<QString> loadEntryList(QString dir);
@@ -62,7 +57,8 @@ signals:
     void directoryInitialized(const QString&, const QList<QString>&);
 
 public slots:
-    void dirReceived(const QString&);
+    // When mainWindow openfileDialog selected a file, it passes a filepath to this slot
+    void dirReceived(const QString& path);
 };
 
 

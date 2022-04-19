@@ -4,7 +4,11 @@
 #include <QGraphicsWidget>
 #include <QGraphicsItem>
 #include <QRectF>
+#include <QPainter>
+#include <memory>
 
+#include "model/directorymanager.h"
+#include "model/imagemanager.h"
 #include "object/image.h"
 #include "util/constants.h"
 #include "util/utils.h"
@@ -25,12 +29,14 @@ public:
      */
 
     explicit GallaryItem(QGraphicsItem *parent = 0);
+    explicit GallaryItem(const QString& entryStr="", QGraphicsItem *parent = 0);
     ~GallaryItem();
 
     // Public Geometry Settings/Modifier
-    void padding(qreal length, Edges edges=ALL);   // or setContentsMargins
     void size(qreal x, qreal y); // or resize
 
+    void loaded();
+    void unload();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -41,12 +47,22 @@ private:
 
     qreal m_paddingTop, m_paddingBottom, m_paddingLeading, m_paddingTrailing;   // Top, bottom, Leading, Trailing
 
+    QString m_entryStr;
+
     // status
     bool m_bHovered, m_bSelected;
 
     // geometry modifier
     void updateBoundingRect();
 
+    void drawThumbnail(QPainter* painter);
+
+    void updateDrawPosition();
+
+   std::unique_ptr<QPixmap> m_pixmap;
+   QGraphicsPixmapItem m_pixmapItem;
+
+   QRect drawCenter;
 
 
 

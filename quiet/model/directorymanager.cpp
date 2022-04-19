@@ -74,11 +74,22 @@ QFileInfo DirectoryManager::getFileInfo(const QString& fileBasename)
 
 HashKey DirectoryManager::getHashKey(const QString &fileBasename)
 {
+    // Request Image
+    // Step 1. Check if it is a valid path, get the node if it is valid
+    // Step 2. check if it is loaded in cache
+    // Step 2a. if it is in cache, do nothing
+    // Step 2b. if it is not in cache, request ImageManager to load in cache
+    // Step 3. return a HashKey to the View which requested for the image
+
     Node* queryNode = searchNode(fileBasename);
     HashKey key;
 
+    qDebug() << "load" << fileBasename;
+
     if(!queryNode->isCached()) {
         key = g_imageManager->loadImage(queryNode->getFileInfo());
+        queryNode->setCached();
+        queryNode->setHashKey(key);
     } else {
         key = queryNode->getHashKey();
     }
@@ -121,37 +132,6 @@ void DirectoryManager::printTree()
    m_fileEntriesRoot->print();
 }
 
-HashKey DirectoryManager::queryImage(const QString &queryImageStr)
-{
-
-    // Request Image
-    // Step 1. Check if it is a valid path, get the node if it is valid
-    // Step 2. check if it is loaded in cache
-    // Step 2a. if it is in cache, do nothing
-    // Step 2b. if it is not in cache, request ImageManager to load in cache
-    // Step 3. return a HashKey to the View which requested for the image (single listener, no signal/slots)
-    // Step 4. View retrieve the Image from HashList in ImageManager
-
-    // Step 1
-    Node* queryNode = searchNode(queryImageStr);
-    if(!queryNode) {
-        return -1;
-    }
-
-    // Step 2
-    if(!queryNode->isCached()) {
-
-        HashKey key = g_imageManager->load(queryNode->getFileInfo().absoluteFilePath());
-        qDebug() << "key" <<key;
-        queryNode->setHashKey(key);
-    }
-
-    return queryNode->getHashKey();
-//    return 0;
-}
-
-
-
 
 // Private Methods
 
@@ -165,47 +145,29 @@ QList<QString> DirectoryManager::loadEntryList(QString dir)
     QDir directory(m_directory);
     QStringList files = directory.entryList();
     foreach (QString filename, files) {
-       // ignore "." (hidden files)
+       // Ignore "." (hidden files)
        if(filename.startsWith(".")) continue;
 
        QString fullpath = dir + "/" + filename;
        QFileInfo fileInfo(fullpath);
 
        if (QFileInfo(fullpath).isDir()) {
-           // Directory, currently ignored
+           // Directory, currently skipped
        }
        else {
-           // Tree
+           // Tree insertion
            QString basename(fileInfo.baseName());
-           fileList.append(basename);
-           qDebug() << "basename" << fileList;
            appendFile(basename, fileInfo);
+
+           // return a fileBasename list for further query usage
+           fileList.append(basename);
        }
     }
 
+    // Debug Usage
     printTree();
 
     return fileList;
-
-
-}
-
-
-// public slots
-
-void DirectoryManager::dirReceived(const QString &path)
-{
-    qDebug() << "[Debug] DirectoryManager.cpp - Selected path:" << path;
-
-    setDirectory(QFileInfo(path).absolutePath());
-    QList<QString> entryList = loadEntryList(m_directory);
-
-    emit directoryInitialized(QFileInfo(path).baseName(), entryList);
-
-
-    // load file
-//    g_imageManager->load(path);
-
 }
 
 Node* DirectoryManager::searchNode(const QString &fileBasename)
@@ -218,3 +180,16 @@ Node* DirectoryManager::searchNode(const QString &fileBasename)
      }
      return queryNode;
 }
+
+// public slots
+
+void DirectoryManager::dirReceived(const QString &path)
+{
+    qDebug() << "[Debug] DirectoryManager.cpp - Selected path:" << path;
+
+    setDirectory(QFileInfo(path).absolutePath());
+    QList<QString> entryList = loadEntryList(m_directory);
+
+    emit directoryInitialized(QFileInfo(path).baseName(), entryList);
+}
+

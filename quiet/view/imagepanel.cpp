@@ -41,7 +41,6 @@ void ImagePanel::initConnect()
     connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &ImagePanel::loadImage);
 
     // Connect Loaded Image and Image Display
-    connect(g_imageManager, &ImageManager::imageLoaded, this, &ImagePanel::showImage);
 
 
 }
@@ -141,22 +140,18 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
 
 void ImagePanel::loadImage(const QString& mainEntry, const QList<QString>& entryList)
 {
-    g_directoryManager->queryImage(mainEntry);
-
-
-//    HashKey key = g_directoryManager->getHashKey(mainEntry);
-
+    Q_UNUSED(entryList);
+    HashKey key = g_directoryManager->getHashKey(mainEntry);
+    showImage(key);
 }
 
 
-void ImagePanel::showImage(std::shared_ptr<Image> image)
+void ImagePanel::showImage(HashKey key)
 {
-    if(!image){
-        qDebug() <<" No image";
-    }
-
+    // Reset UI
     reset();
-    m_pixmap = std::move(image.get()->getPixmap());
+
+    m_pixmap = (*g_imageManager)[key]->getPixmap();
     m_pixmapItem.setPixmap(*m_pixmap);
 //    m_pixmapItem.setOffset(m_scene->width() / 2.0 - m_pixmap->width() / 2.0, m_scene->height() / 2.0 - m_pixmap->height() / 2.0);
 
@@ -167,5 +162,6 @@ void ImagePanel::showImage(std::shared_ptr<Image> image)
     m_pixmapItem.show();
 
 }
+
 
 

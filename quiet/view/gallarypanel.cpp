@@ -1,30 +1,121 @@
 #include "gallarypanel.h"
 
-GallaryPanel::GallaryPanel(QWidget *parent) : QGraphicsView(parent)
+/*
+ * TODO:
+ * - remove settings parameters out and transfer to util/settings
+ * - ensureVisible -> selection (not default 0)
+ */
+
+GallaryPanel::GallaryPanel(QWidget *parent) :
+    QGraphicsView(parent),
+    m_gallaryItemSize(128),
+    m_gallaryItemPaddingSize(8)
 {
-    m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(-300, -1000, 600, 2000);
-    m_scene->setBackgroundBrush(QColor(60, 60, 60));
-
-    // Widget Settings
-    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-    this->setScene(m_scene);
+    // Load parameters from Settings
+    initSettings();
+    // Layout Settings
+    initLayout();
+    initAttributes();
+    m_scrollBar = this->horizontalScrollBar();
+    initConnect();
 
 }
 
 GallaryPanel::~GallaryPanel()
 {
+    for(int itemIndex = 0; itemIndex < m_gallaryItems.count(); ++itemIndex) {
+        if(m_gallaryItems[itemIndex]) {
+            delete m_gallaryItems[itemIndex];
+        }
+    }
+    delete m_scene;
+}
 
+void GallaryPanel::initAttributes()
+{
+    // Mouse Propagation (default disabled)
+    this->setAttribute(Qt::WA_NoMousePropagation, true);
+
+    // Keyboard Focus (default disable)
+    this->setFocusPolicy(Qt::NoFocus);
+
+    // ScrollBar Policies
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->horizontalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 
 void GallaryPanel::initConnect()
 {
+    connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &GallaryPanel::loadThumbnails);
+
+    // connect scrollbar indicator
+    connect(m_scrollBar, &QScrollBar::valueChanged, this, &GallaryPanel::loadVisibleThumbnails);
+}
+
+void GallaryPanel::initLayout()
+{
+    // Set Alignment to the topleft corner
+    this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    // Scene Setups
+    m_scene = new QGraphicsScene();
+    m_scene->setSceneRect(0, 0, 2000, 600);
+    m_scene->setBackgroundBrush(QColor(60, 60, 60));
+    this->setScene(m_scene);
+}
+
+void GallaryPanel::initSettings()
+{
 
 }
 
+void GallaryPanel::updateGallaryItemPositions()
+{
+    updateGallaryItemPositions(0, m_gallaryItems.count() - 1);
+}
+
+void GallaryPanel::updateGallaryItemPositions(int start, int end)
+{
+    if(start > end) return;
+    if(!validPosition(start) || !validPosition(end)) return;
+    if(m_gallaryItems.empty()) return;
+
+
+    for(int idx = start; idx <= end; idx++){
+        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 4 * m_gallaryItemPaddingSize) + m_gallaryItemPaddingSize, 2);
+    }
+}
+
+void GallaryPanel::updateSceneSize()
+{
+    int width = qMax((int)m_scene->itemsBoundingRect().width(), this->width());
+    int height = qMax((int)m_scene->itemsBoundingRect().height(), this->height());
+
+    m_scene->setSceneRect(0, 0, width, height);
+    QPointF center = mapToScene(viewport()->rect().center());
+    QGraphicsView::centerOn(center.x(), 0);
+}
+
+bool GallaryPanel::validPosition(int pos)
+{
+    return pos >=0 && pos < m_gallaryItems.count();
+}
+
+void GallaryPanel::ensureItemVisible(int pos)
+{
+    if(!validPosition(pos)) return;
+    ensureVisible(m_gallaryItems.at(pos), m_gallaryItemSize / 2, 0);
+}
+
+// Private
+
+GallaryItem* GallaryPanel::createGallaryItem(const QString& entryStr)
+{
+    GallaryItem* gallaryItem = new GallaryItem(entryStr);
+    return gallaryItem;
+}
 
 void GallaryPanel::loadVisibleThumbnails()
 {
@@ -50,10 +141,33 @@ void GallaryPanel::loadVisibleThumbnails()
         visibleItems.append(m_scene->items(postOffsetRect, Qt::IntersectsItemShape, Qt::AscendingOrder));
     }
 
-    // Filter which visibleItem are not loaded in cache (ImageManager imgCache)
-    // emit requestLoad signal
-    // check if loaded (dirManager)
 
+    // Filter which visibleItem are not loaded in cache (ImageManager imgCache)
+    // check if loaded (dirManager)
+    foreach (auto items, visibleItems) {
+        items->show();
+    }
 
 }
 
+// Public slots
+
+void GallaryPanel::showEvent(QShowEvent *event)
+{
+    QGraphicsView::showEvent(event);
+}
+
+void GallaryPanel::loadThumbnails(const QString & mainEntry, const QList<QString>& entryList)
+{
+    Q_UNUSED(mainEntry);
+    // create thumbnails
+    GallaryItem* gallaryItem;
+    for(int entryIdx = 0; entryIdx < entryList.count(); entryIdx++)  {
+        gallaryItem = createGallaryItem(entryList[entryIdx]);
+        m_gallaryItems.append(gallaryItem);
+        m_scene->addItem(gallaryItem);
+    }
+    updateGallaryItemPositions();
+    updateSceneSize();
+    ensureItemVisible(0);
+}
