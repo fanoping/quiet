@@ -16,14 +16,6 @@ public:
     explicit GallaryPanel(QWidget *parent = 0);
     ~GallaryPanel();
 
-
-
-    // TODO: GallaryItem positioning
-
-
-//     void initConnet();
-
-
 private:
     QGraphicsScene* m_scene;
     QList<GallaryItem*> m_gallaryItems;
@@ -32,11 +24,10 @@ private:
     void loadVisibleThumbnails();
 
     // Scrolling Preload
-    int offsetPreloadRange = 1024;
+    int offsetPreloadRange = 128;
     ScrollDirection previousScollDirection = SCROLL_INWARDS;
 
 ///////////
-
 
     // Initial Setup
     void initAttributes();
@@ -56,17 +47,21 @@ private:
    // - resize event (window size)
    // - padding size changes
 
-   // GallaryItem position update
+   // GallaryItem position update (default 0 to count - 1)
    void updateGallaryItemPositions();
+
+   // GallaryItem position update
    void updateGallaryItemPositions(int start, int end);
 
    // Scene Size update (in order to match up with its content)
    void updateSceneSize();
 
    // Utility functions
+   // Check valid pos is inrange
    bool validPosition(int pos);
-   void ensureItemVisible(int pos);
 
+   // Ensure visible with respect to pos
+   void ensureItemVisible(int pos);
 
 
 signals:

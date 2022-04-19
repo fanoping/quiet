@@ -15,7 +15,6 @@ ImageWidget::ImageWidget(QWidget *parent) : QWidget(parent)
     m_layout.addWidget(m_gallaryPanel.get());
 
     m_imagePanel->show();
-    qDebug() <<"debug";
     m_gallaryPanel->show();
 
     setLayout(&m_layout);

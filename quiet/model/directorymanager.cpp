@@ -84,7 +84,7 @@ HashKey DirectoryManager::getHashKey(const QString &fileBasename)
     Node* queryNode = searchNode(fileBasename);
     HashKey key;
 
-    qDebug() << "load" << fileBasename;
+//    qDebug() << "load" << fileBasename;
 
     if(!queryNode->isCached()) {
         key = g_imageManager->loadImage(queryNode->getFileInfo());

@@ -8,17 +8,14 @@
 
 GallaryPanel::GallaryPanel(QWidget *parent) :
     QGraphicsView(parent),
-    m_gallaryItemSize(128),
-    m_gallaryItemPaddingSize(8)
+    m_gallaryItemSize(256),
+    m_gallaryItemPaddingSize(4)
 {
-    // Load parameters from Settings
     initSettings();
-    // Layout Settings
     initLayout();
     initAttributes();
     m_scrollBar = this->horizontalScrollBar();
     initConnect();
-
 }
 
 GallaryPanel::~GallaryPanel()
@@ -33,16 +30,28 @@ GallaryPanel::~GallaryPanel()
 
 void GallaryPanel::initAttributes()
 {
-    // Mouse Propagation (default disabled)
+    // Disable mouse propagation to parent
     this->setAttribute(Qt::WA_NoMousePropagation, true);
+
+    // Receives mouse move events even if no buttons are pressed.
+    this->setMouseTracking(true);
 
     // Keyboard Focus (default disable)
     this->setFocusPolicy(Qt::NoFocus);
+
+    // attempt to find optimal method for updating viewport
+    this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     // ScrollBar Policies
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->horizontalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+
+    this->setAttribute(Qt::WA_TranslucentBackground, false);
+    this->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
+    this->setOptimizationFlag(QGraphicsView::DontSavePainterState, true);
+    setRenderHint(QPainter::Antialiasing, false);
+    setRenderHint(QPainter::SmoothPixmapTransform, false);
 }
 
 
@@ -61,7 +70,7 @@ void GallaryPanel::initLayout()
 
     // Scene Setups
     m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(0, 0, 2000, 600);
+    m_scene->setSceneRect(0, 0, 1000, 600);
     m_scene->setBackgroundBrush(QColor(60, 60, 60));
     this->setScene(m_scene);
 }
@@ -84,7 +93,7 @@ void GallaryPanel::updateGallaryItemPositions(int start, int end)
 
 
     for(int idx = start; idx <= end; idx++){
-        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 4 * m_gallaryItemPaddingSize) + m_gallaryItemPaddingSize, 2);
+        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 4 * m_gallaryItemPaddingSize) + m_gallaryItemPaddingSize, m_gallaryItemPaddingSize);
     }
 }
 
@@ -92,7 +101,7 @@ void GallaryPanel::updateSceneSize()
 {
     int width = qMax((int)m_scene->itemsBoundingRect().width(), this->width());
     int height = qMax((int)m_scene->itemsBoundingRect().height(), this->height());
-
+    qDebug() << "Scene Size" << width <<  height;
     m_scene->setSceneRect(0, 0, width, height);
     QPointF center = mapToScene(viewport()->rect().center());
     QGraphicsView::centerOn(center.x(), 0);
@@ -106,7 +115,7 @@ bool GallaryPanel::validPosition(int pos)
 void GallaryPanel::ensureItemVisible(int pos)
 {
     if(!validPosition(pos)) return;
-    ensureVisible(m_gallaryItems.at(pos), m_gallaryItemSize / 2, 0);
+    ensureVisible(m_gallaryItems.at(pos), m_gallaryItemSize, 0);
 }
 
 // Private
@@ -114,6 +123,8 @@ void GallaryPanel::ensureItemVisible(int pos)
 GallaryItem* GallaryPanel::createGallaryItem(const QString& entryStr)
 {
     GallaryItem* gallaryItem = new GallaryItem(entryStr);
+    gallaryItem->setSize(m_gallaryItemSize);
+    gallaryItem->setPaddingSize(m_gallaryItemPaddingSize);
     return gallaryItem;
 }
 
@@ -144,9 +155,9 @@ void GallaryPanel::loadVisibleThumbnails()
 
     // Filter which visibleItem are not loaded in cache (ImageManager imgCache)
     // check if loaded (dirManager)
-    foreach (auto items, visibleItems) {
-        items->show();
-    }
+//    foreach (auto items, visibleItems) {
+//        items->show();
+//    }
 
 }
 
@@ -155,6 +166,8 @@ void GallaryPanel::loadVisibleThumbnails()
 void GallaryPanel::showEvent(QShowEvent *event)
 {
     QGraphicsView::showEvent(event);
+    loadVisibleThumbnails();
+    updateSceneSize();
 }
 
 void GallaryPanel::loadThumbnails(const QString & mainEntry, const QList<QString>& entryList)
