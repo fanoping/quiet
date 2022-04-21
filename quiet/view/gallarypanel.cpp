@@ -3,13 +3,15 @@
 /*
  * TODO:
  * - remove settings parameters out and transfer to util/settings
- * - ensureVisible -> selection (not default 0)
+ * - ensureVisible -> selection (not default 0) (testing)
  * - pass not only 1 image to imagePanel (currently only one)
+ * - resize event
+ * - wheel event (should scroll horizontally)
  */
 
 GallaryPanel::GallaryPanel(QWidget *parent) :
     QGraphicsView(parent),
-    m_gallaryItemSize(140),
+    m_gallaryItemSize(128),
     m_gallaryItemPaddingSize(4)
 {
     initSettings();
@@ -75,7 +77,7 @@ void GallaryPanel::initLayout()
 
     // Scene Setups
     m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(0, 0, 1000, 600);
+    m_scene->setSceneRect(0, 0, 1000, 500);
     m_scene->setBackgroundBrush(g_settingsManager->themePalette().secondaryBackground);
     this->setScene(m_scene);
 }
@@ -104,9 +106,10 @@ void GallaryPanel::updateGallaryItemPositions(int start, int end)
 
 void GallaryPanel::updateSceneSize()
 {
-    int width = qMax((int)m_scene->itemsBoundingRect().width(), this->width());
+    int trailingPadding = 8;
+    int width = qMax((int)m_scene->itemsBoundingRect().width(), this->width()) +trailingPadding;
     int height = qMax((int)m_scene->itemsBoundingRect().height(), this->height());
-    qDebug() << "Scene Size" << width <<  height;
+
     m_scene->setSceneRect(0, 0, width, height);
     QPointF center = mapToScene(viewport()->rect().center());
     QGraphicsView::centerOn(center.x(), 0);
@@ -211,6 +214,11 @@ void GallaryPanel::mousePressEvent(QMouseEvent *event)
     }
 
     QGraphicsView::mousePressEvent(event);
+}
+
+void GallaryPanel::resizeEvent(QResizeEvent *event)
+{
+    QGraphicsView::resizeEvent(event);
 }
 
 // Public slots

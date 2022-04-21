@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QGraphicsView>
 #include <QScrollBar>
+#include <QVBoxLayout>
 
 #include "model/directorymanager.h"
 #include "view/gallaryitem.h"
@@ -18,6 +19,7 @@ public:
     ~GallaryPanel();
 
 private:
+    QVBoxLayout m_layout;
     QGraphicsScene* m_scene;
     QList<GallaryItem*> m_gallaryItems;
     QScrollBar* m_scrollBar;
@@ -76,6 +78,9 @@ private:
 protected:
    // Mouse Events
    void mousePressEvent(QMouseEvent* event) override;
+
+   // Window Resize
+   void resizeEvent(QResizeEvent* event) override;
 
 
 signals:

@@ -4,8 +4,8 @@ Settings* g_settingsManager = nullptr;
 
 Settings::Settings(QObject *parent) : QObject(parent)
 {
-//    m_themePalette = ThemePalette(THEME_DARK);
-    m_themePalette = ThemePalette(THEME_LIGHT);
+    m_themePalette = ThemePalette(THEME_DARK);
+//    m_themePalette = ThemePalette(THEME_LIGHT);
 }
 
 Settings::~Settings()
