@@ -27,8 +27,7 @@ ImageWidget::~ImageWidget()
 
 void ImageWidget::initConnect()
 {
-    // private widgets initialization
-    m_imagePanel->initConnect();
-//    m_gallaryPanel->initConnect();
+    // Private widgets connections
+    connect(m_gallaryPanel.get(), &GallaryPanel::onSelectedItems, m_imagePanel.get(), &ImagePanel::loadImage);
 }
 

@@ -19,7 +19,6 @@ public:
     // initialize connection
     void initConnect();
 
-
 signals:
 
 public slots:

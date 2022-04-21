@@ -14,6 +14,7 @@
 #include "model/directorymanager.h"
 #include "model/imagemanager.h"
 #include "object/image.h"
+#include "util/settings.h"
 
 class ImagePanel : public QGraphicsView
 {
@@ -22,9 +23,6 @@ public:
     // initialization
     explicit ImagePanel(QWidget *parent = 0);
     ~ImagePanel();
-
-    // initialize connection
-    void initConnect();
 
 private:
     QGraphicsScene* m_scene;
@@ -41,6 +39,14 @@ private:
     void showImage(HashKey key);
 
 
+    /////////
+
+    // Initial Setup
+    void initAttributes();
+    void initConnect();
+    void initLayout();
+
+
 protected:
   void wheelEvent(QWheelEvent* event) override;
 
@@ -50,7 +56,7 @@ signals:
 
 
 public slots:
-    void loadImage(const QString&, const QList<QString>&);
+    void loadImage(const QString&);
 
 };
 

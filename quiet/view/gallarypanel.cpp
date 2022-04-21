@@ -4,11 +4,12 @@
  * TODO:
  * - remove settings parameters out and transfer to util/settings
  * - ensureVisible -> selection (not default 0)
+ * - pass not only 1 image to imagePanel (currently only one)
  */
 
 GallaryPanel::GallaryPanel(QWidget *parent) :
     QGraphicsView(parent),
-    m_gallaryItemSize(256),
+    m_gallaryItemSize(140),
     m_gallaryItemPaddingSize(4)
 {
     initSettings();
@@ -40,24 +41,28 @@ void GallaryPanel::initAttributes()
     this->setFocusPolicy(Qt::NoFocus);
 
     // attempt to find optimal method for updating viewport
-    this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 
     // ScrollBar Policies
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->horizontalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
+    // Others
     this->setAttribute(Qt::WA_TranslucentBackground, false);
     this->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
     this->setOptimizationFlag(QGraphicsView::DontSavePainterState, true);
-    setRenderHint(QPainter::Antialiasing, false);
-    setRenderHint(QPainter::SmoothPixmapTransform, false);
+    this->setRenderHint(QPainter::Antialiasing, false);
+    this->setRenderHint(QPainter::SmoothPixmapTransform, false);
+
+    // Remove white borders around QGraphicsWidget
+    this->setFrameShape(QFrame::NoFrame);
 }
 
 
 void GallaryPanel::initConnect()
 {
-    connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &GallaryPanel::loadThumbnails);
+    connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &GallaryPanel::loadGallaryItems);
 
     // connect scrollbar indicator
     connect(m_scrollBar, &QScrollBar::valueChanged, this, &GallaryPanel::loadVisibleThumbnails);
@@ -71,7 +76,7 @@ void GallaryPanel::initLayout()
     // Scene Setups
     m_scene = new QGraphicsScene();
     m_scene->setSceneRect(0, 0, 1000, 600);
-    m_scene->setBackgroundBrush(QColor(60, 60, 60));
+    m_scene->setBackgroundBrush(g_settingsManager->themePalette().secondaryBackground);
     this->setScene(m_scene);
 }
 
@@ -93,7 +98,7 @@ void GallaryPanel::updateGallaryItemPositions(int start, int end)
 
 
     for(int idx = start; idx <= end; idx++){
-        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 4 * m_gallaryItemPaddingSize) + m_gallaryItemPaddingSize, m_gallaryItemPaddingSize);
+        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 2 * (m_gallaryItemPaddingSize + m_gallaryItems[idx]->getPaddingSize())) + m_gallaryItemPaddingSize, m_gallaryItemPaddingSize);
     }
 }
 
@@ -107,6 +112,18 @@ void GallaryPanel::updateSceneSize()
     QGraphicsView::centerOn(center.x(), 0);
 }
 
+void GallaryPanel::updateGallaryItemSelection(const QList<int>& selection)
+{
+    foreach (int pos, m_selectedPos) {
+        m_gallaryItems[pos]->setSelected(false);
+    }
+
+    foreach (int pos, selection) {
+        m_gallaryItems[pos]->setSelected(true);
+    }
+    m_selectedPos = selection;
+}
+
 bool GallaryPanel::validPosition(int pos)
 {
     return pos >=0 && pos < m_gallaryItems.count();
@@ -115,7 +132,7 @@ bool GallaryPanel::validPosition(int pos)
 void GallaryPanel::ensureItemVisible(int pos)
 {
     if(!validPosition(pos)) return;
-    ensureVisible(m_gallaryItems.at(pos), m_gallaryItemSize, 0);
+    ensureVisible(m_gallaryItems.at(pos)->sceneBoundingRect(), m_gallaryItemSize, 0);
 }
 
 // Private
@@ -123,9 +140,19 @@ void GallaryPanel::ensureItemVisible(int pos)
 GallaryItem* GallaryPanel::createGallaryItem(const QString& entryStr)
 {
     GallaryItem* gallaryItem = new GallaryItem(entryStr);
+    gallaryItem->setPaddingSize(2 * m_gallaryItemPaddingSize);
     gallaryItem->setSize(m_gallaryItemSize);
-    gallaryItem->setPaddingSize(m_gallaryItemPaddingSize);
     return gallaryItem;
+}
+
+void GallaryPanel::resetGallaryItems()
+{
+    for(int itemIndex = 0; itemIndex < m_gallaryItems.count(); ++itemIndex) {
+        if(m_gallaryItems[itemIndex]) {
+            delete m_gallaryItems[itemIndex];
+        }
+    }
+    m_gallaryItems.clear();
 }
 
 void GallaryPanel::loadVisibleThumbnails()
@@ -152,13 +179,38 @@ void GallaryPanel::loadVisibleThumbnails()
         visibleItems.append(m_scene->items(postOffsetRect, Qt::IntersectsItemShape, Qt::AscendingOrder));
     }
 
+}
 
-    // Filter which visibleItem are not loaded in cache (ImageManager imgCache)
-    // check if loaded (dirManager)
-//    foreach (auto items, visibleItems) {
-//        items->show();
-//    }
+void GallaryPanel::mousePressEvent(QMouseEvent *event)
+{
+    // Deal only with left and right mouse click
+    if(event->button() != Qt::LeftButton && event->button() != Qt::RightButton) {
+        event->ignore();
+        return;
+    }
 
+    GallaryItem* item = dynamic_cast<GallaryItem*>(itemAt(event->pos()));
+
+    // Check whether the mouse clicks on item's boundingRect
+    if(item) {
+        int index = m_gallaryItems.indexOf(item);
+
+        QList<int> newPos = m_selectedPos;
+
+        if(event->button() == Qt::LeftButton) {
+            if(event->modifiers() & Qt::ControlModifier) {
+                newPos.append(index);
+            } else {
+                newPos = QList<int>() << index;
+            }
+        } else {
+            newPos = QList<int>() << index;
+        }
+        emit onSelectedItems(m_gallaryItems.at(index)->getStr());
+        updateGallaryItemSelection(newPos);
+    }
+
+    QGraphicsView::mousePressEvent(event);
 }
 
 // Public slots
@@ -170,17 +222,30 @@ void GallaryPanel::showEvent(QShowEvent *event)
     updateSceneSize();
 }
 
-void GallaryPanel::loadThumbnails(const QString & mainEntry, const QList<QString>& entryList)
+void GallaryPanel::loadGallaryItems(const QString & mainEntry, const QList<QString>& entryList)
 {
-    Q_UNUSED(mainEntry);
+    // clear previous load
+    resetGallaryItems();
+
     // create thumbnails
     GallaryItem* gallaryItem;
-    for(int entryIdx = 0; entryIdx < entryList.count(); entryIdx++)  {
+    int selectPos = 0;
+    QList<int> newPos = QList<int>();
+
+    for(int entryIdx = 0; entryIdx < entryList.count(); ++entryIdx)  {
+        if(entryList[entryIdx] == mainEntry) {
+            selectPos = entryIdx;
+            newPos.append(entryIdx);
+        }
+
         gallaryItem = createGallaryItem(entryList[entryIdx]);
         m_gallaryItems.append(gallaryItem);
         m_scene->addItem(gallaryItem);
     }
     updateGallaryItemPositions();
     updateSceneSize();
-    ensureItemVisible(0);
+    ensureItemVisible(selectPos);
+
+    updateGallaryItemSelection(newPos);
+    emit onSelectedItems(mainEntry);
 }

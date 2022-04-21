@@ -3,25 +3,9 @@
 ImagePanel::ImagePanel(QWidget *parent) : QGraphicsView(parent),
     m_scale(1.0)
 {
-
-    // Graphics Scene Setup
-    m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(-1000, -1000, 2000, 2000);
-    m_scene->setBackgroundBrush(QColor(0, 0, 0));
-    m_scene->addItem(&m_pixmapItem);
-
-    qDebug()<< this->devicePixelRatio();
-    // PixmapItem Setup
-    m_pixmapItem.setScale(1.0f);
-    m_pixmapItem.setTransformationMode(Qt::SmoothTransformation);
-//    m_pixmapItem.setOffset(m_scene->width() / 2.0 - m_pixmap->get()->width(), m_scene->height() / 2.0 - m_pixmap->get()->height());
-
-    // GraphicsView Setup
-//    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setFrameShape(QFrame::NoFrame);
-    this->setScene(m_scene);
-
+    initLayout();
+    initAttributes();
+    initConnect();
 }
 
 ImagePanel::~ImagePanel()
@@ -29,20 +13,32 @@ ImagePanel::~ImagePanel()
     delete m_scene;
 }
 
-/*
+void ImagePanel::initAttributes()
+{
+    // Scrollbar Policies
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-  Public Methods
-
-*/
+    // Remove White Borders
+    this->setFrameShape(QFrame::NoFrame);
+}
 
 void ImagePanel::initConnect()
 {
-    // Connect Directory Initialization
-    connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &ImagePanel::loadImage);
 
-    // Connect Loaded Image and Image Display
+}
 
+void ImagePanel::initLayout()
+{
+    m_scene = new QGraphicsScene();
+    m_scene->setSceneRect(-1000, -1000, 2000, 2000);
+    m_scene->setBackgroundBrush(g_settingsManager->themePalette().primaryBackground);
+    m_scene->addItem(&m_pixmapItem);
 
+    m_pixmapItem.setScale(1.0f);
+    m_pixmapItem.setTransformationMode(Qt::SmoothTransformation);
+
+    this->setScene(m_scene);
 }
 
 /*
@@ -138,13 +134,18 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
 
 */
 
-void ImagePanel::loadImage(const QString& mainEntry, const QList<QString>& entryList)
+//void ImagePanel::loadImage(const QString& mainEntry, const QList<QString>& entryList)
+//{
+//    Q_UNUSED(entryList);
+//    HashKey key = g_directoryManager->getHashKey(mainEntry);
+//    showImage(key);
+//}
+
+void ImagePanel::loadImage(const QString& mainEntry)
 {
-    Q_UNUSED(entryList);
     HashKey key = g_directoryManager->getHashKey(mainEntry);
     showImage(key);
 }
-
 
 void ImagePanel::showImage(HashKey key)
 {
@@ -153,7 +154,6 @@ void ImagePanel::showImage(HashKey key)
 
     m_pixmap = (*g_imageManager)[key]->getPixmap();
     m_pixmapItem.setPixmap(*m_pixmap);
-//    m_pixmapItem.setOffset(m_scene->width() / 2.0 - m_pixmap->width() / 2.0, m_scene->height() / 2.0 - m_pixmap->height() / 2.0);
 
     // Center the image at pos (0, 0)
     m_pixmapItem.setOffset(-m_pixmap->width() / 2.0, -m_pixmap->height() / 2.0);

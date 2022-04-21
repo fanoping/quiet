@@ -21,5 +21,10 @@ enum ScrollDirection {
     SCROLL_OUTWARDS    // angle +120
 };
 
+enum Theme {
+    THEME_LIGHT,
+    THEME_DARK
+};
+
 #endif // CONSTANTS
 

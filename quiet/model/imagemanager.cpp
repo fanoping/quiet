@@ -18,7 +18,6 @@ ImageManager::~ImageManager()
             delete m_imageCache.get()[cacheIndex];
         }
     }
-    delete g_imageManager;
 }
 
 ImageManager* ImageManager::getInstance()

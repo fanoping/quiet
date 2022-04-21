@@ -8,7 +8,6 @@ ActionManager::ActionManager(QObject *parent) : QObject(parent)
 }
 
 ActionManager::~ActionManager() {
-    delete g_actionManager;
 }
 
 ActionManager* ActionManager::getInstance()

@@ -8,6 +8,7 @@
 #include "model/directorymanager.h"
 #include "view/gallaryitem.h"
 #include "util/constants.h"
+#include "util/settings.h"
 
 class GallaryPanel : public QGraphicsView
 {
@@ -35,12 +36,17 @@ private:
     void initLayout();
     void initSettings();
 
-    // Initial Creation
+    // Initial Creation and Reset
    GallaryItem* createGallaryItem(const QString& entryStr);
+   void resetGallaryItems();
 
    // GallaryItem Attributes
    int m_gallaryItemSize;    // Base square size of GallaryItem
    int m_gallaryItemPaddingSize;
+
+   // Collection of Status
+   // Selection
+   QList<int> m_selectedPos;
 
    // Update methods when initial creation or recreation occurs
    // - file insertion or removed
@@ -56,6 +62,9 @@ private:
    // Scene Size update (in order to match up with its content)
    void updateSceneSize();
 
+   // GallaryItem selection update
+   void updateGallaryItemSelection(const QList<int>& selection);
+
    // Utility functions
    // Check valid pos is inrange
    bool validPosition(int pos);
@@ -64,11 +73,18 @@ private:
    void ensureItemVisible(int pos);
 
 
+protected:
+   // Mouse Events
+   void mousePressEvent(QMouseEvent* event) override;
+
+
 signals:
+   void onSelectedItems(const QString&);
+
 
 public slots:
     void showEvent(QShowEvent *event) override;
-    void loadThumbnails(const QString&, const QList<QString>&);
+    void loadGallaryItems(const QString&, const QList<QString>&);
 
 };
 

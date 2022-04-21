@@ -16,7 +16,6 @@ DirectoryManager::DirectoryManager(QObject *parent) : QObject(parent), m_directo
 DirectoryManager::~DirectoryManager()
 {
     delete m_fileEntriesRoot;
-    delete g_directoryManager;
 }
 
 DirectoryManager* DirectoryManager::getInstance()
