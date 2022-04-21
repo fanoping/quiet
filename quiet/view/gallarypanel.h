@@ -9,7 +9,7 @@
 #include "model/directorymanager.h"
 #include "view/gallaryitem.h"
 #include "util/constants.h"
-#include "util/settings.h"
+#include "settings.h"
 
 class GallaryPanel : public QGraphicsView
 {

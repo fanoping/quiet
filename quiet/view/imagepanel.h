@@ -14,7 +14,7 @@
 #include "model/directorymanager.h"
 #include "model/imagemanager.h"
 #include "object/image.h"
-#include "util/settings.h"
+#include "settings.h"
 
 class ImagePanel : public QGraphicsView
 {

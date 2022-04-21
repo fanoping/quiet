@@ -13,7 +13,7 @@
 #include "object/image.h"
 #include "util/constants.h"
 #include "util/utils.h"
-#include "util/settings.h"
+#include "settings.h"
 
 
 /*
