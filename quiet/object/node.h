@@ -12,6 +12,11 @@
 
 #include "util/utils.h"
 
+#define NODE_VALID 0x40
+#define NODE_CACHE 0x80
+#define NODE_HASHKEY 0x3F
+
+
 class Node
 {
 public:

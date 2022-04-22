@@ -83,8 +83,6 @@ HashKey DirectoryManager::getHashKey(const QString &fileBasename)
     Node* queryNode = searchNode(fileBasename);
     HashKey key;
 
-//    qDebug() << "load" << fileBasename;
-
     if(!queryNode->isCached()) {
         key = g_imageManager->loadImage(queryNode->getFileInfo());
         queryNode->setCached();
@@ -143,6 +141,10 @@ QList<QString> DirectoryManager::loadEntryList(QString dir)
 
     QDir directory(m_directory);
     QStringList files = directory.entryList();
+    QRegExp regex(g_settingsManager->supportedFormatRegex());
+    regex.setCaseSensitivity(Qt::CaseInsensitive);
+    files = files.filter(regex);
+
     foreach (QString filename, files) {
        // Ignore "." (hidden files)
        if(filename.startsWith(".")) continue;
@@ -155,7 +157,7 @@ QList<QString> DirectoryManager::loadEntryList(QString dir)
        }
        else {
            // Tree insertion
-           QString basename(fileInfo.baseName());
+           QString basename(fileInfo.fileName());
            appendFile(basename, fileInfo);
 
            // return a fileBasename list for further query usage
@@ -189,6 +191,6 @@ void DirectoryManager::dirReceived(const QString &path)
     setDirectory(QFileInfo(path).absolutePath());
     QList<QString> entryList = loadEntryList(m_directory);
 
-    emit directoryInitialized(QFileInfo(path).baseName(), entryList);
+    emit directoryInitialized(QFileInfo(path).fileName(), entryList);
 }
 

@@ -93,12 +93,12 @@ void Node::print(int level)
 
 bool Node::isValid()
 {
-    return (0x1 << 6) & m_value;
+    return NODE_VALID & m_value;
 }
 
 bool Node::isCached()
 {
-    return (0x1 << 7) & m_value;
+    return NODE_CACHE & m_value;
 }
 
 void Node::setValid()
@@ -108,7 +108,7 @@ void Node::setValid()
         return;
     }
 
-    m_value = m_value | (0x1 << 6);
+    m_value = m_value | NODE_VALID;
 }
 
 void Node::setCached()
@@ -118,13 +118,13 @@ void Node::setCached()
         return;
     }
 
-    m_value = m_value | (0x1 << 7);
+    m_value = m_value | NODE_CACHE;
 }
 
 HashKey Node::getHashKey() const
 {
     // return last 6 bits (key)
-    return m_value & (0x3F);
+    return m_value & NODE_HASHKEY;
 }
 
 QFileInfo Node::getFileInfo() const
@@ -134,7 +134,7 @@ QFileInfo Node::getFileInfo() const
 
 void Node::setHashKey(HashKey key)
 {
-    m_value = (key & 0x3F) | (m_value & 0xC0);
+    m_value = (key & NODE_HASHKEY) | (m_value & 0xC0);
 }
 
 void Node::setFileInfo(const QFileInfo& fileInfo)

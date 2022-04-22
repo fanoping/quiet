@@ -11,6 +11,7 @@
 #include "object/node.h"
 #include "imagemanager.h"
 #include "util/utils.h"
+#include "settings.h"
 
 class DirectoryManager : public QObject
 {

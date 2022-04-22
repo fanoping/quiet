@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QImageReader>
 
 #include "util/themepalette.h"
 
@@ -14,11 +15,18 @@ public:
     ~Settings();
 
     const ThemePalette& themePalette() const;
+    const QString supportedFormatStr() const;
+    const QString supportedFormatRegex() const;
+
 
 private:
     explicit Settings(QObject *parent = 0);
-
+    // Theme Palette, defines color etc...
     ThemePalette m_themePalette;
+
+    // Supported Formats
+    QList<QByteArray> m_supportedFormats;
+
 
 signals:
 

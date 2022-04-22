@@ -38,9 +38,6 @@ MainWindow* MainWindow::getInstance()
     if(!g_mainWindow) {
         g_mainWindow = new MainWindow();
         initConnect();
-        g_mainWindow = new MainWindow();
-        qDebug() << g_mainWindow;
-
     }
     return g_mainWindow;
 }
@@ -55,7 +52,6 @@ MainWindow* MainWindow::getInstance()
 void MainWindow::initConnect()
 {
     qDebug() << "[Debug] MainWindow.cpp - Initial Connection";
-    qDebug() << sizeof(g_mainWindow);
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
 
@@ -73,12 +69,13 @@ void MainWindow::initConnect()
 
 void MainWindow::showOpenDialog()
 {
-    qDebug() << "[DEBUG] MainWindow.cpp - Open dialog triggered";
+    qDebug() << "[Debug] MainWindow.cpp - Open dialog triggered";
     QFileDialog dialog(this);
-    QStringList filter;
-    filter << "*.bmp";
+    QStringList filters;
+    filters.append(g_settingsManager->supportedFormatStr());
+    filters.append("All Files (*)");
     dialog.setDirectory(g_directoryManager->getDirectory());
-    dialog.setNameFilters(filter);
+    dialog.setNameFilters(filters);
     dialog.setWindowTitle("Open File");
     dialog.setWindowModality(Qt::ApplicationModal);
     connect(&dialog, &QFileDialog::fileSelected, g_directoryManager, &DirectoryManager::dirReceived);
