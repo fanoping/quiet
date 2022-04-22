@@ -13,23 +13,12 @@ MainWindow* g_mainWindow = nullptr;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-
-    // initialize private member
-    // shared pointer methods?
-
-
-    // MainWindow only controls Central Widget
-    centralWidget.reset(new CentralWidget(this));
-    setCentralWidget(centralWidget.get());
-
-    QMenu* menu = new QMenu(this);
-    menu->show();
-
+    initAttibutes();
+    initLayout();
 }
 
 MainWindow::~MainWindow()
 {
-
 
 }
 
@@ -42,6 +31,37 @@ MainWindow* MainWindow::getInstance()
     return g_mainWindow;
 }
 
+void MainWindow::initAttibutes()
+{
+    this->setAttribute(Qt::WA_TranslucentBackground, true);
+
+    // Receives mouse move events even if no buttons are pressed.
+    this->setMouseTracking(true);
+
+    // Keyboard Focis (default disable)
+    this->setFocusPolicy(Qt::NoFocus);
+
+    // Set minimum window size (Minimum size after resizing)
+    this->setMinimumSize(480, 360);
+}
+
+void MainWindow::initLayout()
+{
+    // MenuBar Settings
+    file = this->menuBar()->addMenu("File");
+    file->addAction("Open");
+    connect(file, &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver);
+
+    contextMenu = file;
+
+    // Layout Settings
+    // MainWindow only controls Central Widget
+    centralWidget.reset(new CentralWidget(this));
+    this->setCentralWidget(centralWidget.get());
+
+}
+
+
 //MainWindow
 
 //
@@ -53,9 +73,7 @@ void MainWindow::initConnect()
 {
     qDebug() << "[Debug] MainWindow.cpp - Initial Connection";
     //ActionManager -> MainWindow (Received Action)
-    connect(g_actionManager, &ActionManager::openActionPublished, g_mainWindow, &MainWindow::showOpenDialog);
-
-    // private widget members connections
+    connect(g_actionManager, &ActionManager::open, g_mainWindow, &MainWindow::showOpenDialog);
 
 }
 
@@ -83,24 +101,15 @@ void MainWindow::showOpenDialog()
 }
 
 
-
-// Protected Events
-
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event);
+}
 
-    if(event->button() == Qt::RightButton)  {
-        if(!contextMenu) {
-             contextMenu.reset(new ContextMenu(this));
-        }
-
-        if(!contextMenu->isVisible()){
-            QPoint pos = cursor().pos();
-            contextMenu->showAt(pos);
-        }
-        event->accept();
-//        emit onOpenAction("open");
-    }
+void MainWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMainWindow::contextMenuEvent(event);
+    contextMenu->popup(event->globalPos());
 }
 
 

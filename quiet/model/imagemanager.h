@@ -20,9 +20,6 @@ public:
     explicit ImageManager(QObject *parent = 0);
     ~ImageManager();
 
-    // old ones
-    HashKey load(const QString &path);
-    // new ones
     HashKey loadImage(const QFileInfo& fileInfo);
 
     Image* operator[](HashKey key) { return m_imageCache.get()[key]; }

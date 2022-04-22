@@ -7,7 +7,6 @@
 #include <QAction>
 
 
-
 class ActionManager : public QObject
 {
     Q_OBJECT
@@ -21,30 +20,20 @@ private:
     explicit ActionManager(QObject *parent = 0);
     QMap<QString, QString> m_shortcuts;  // <shortcut, actionName>
 
-
     // initialization
     static void initShortCuts();
 
-
-
 signals:
+    // methodName = actionName (action.text() or a name mapping required)
     void open();
-    void close();
-
-    void openActionPublished();
 
 
 public slots:
-    bool actionReceived(const QString &actionName);
-
-
-private slots:
-    void openActionReceived();
-    void fileSelectedReceived();
+    // Wrapper class to invoke corresponding signals
+    // Make sure that always consistent to invoke the right method
+    bool actionReceiver(const QAction* action);
 
 };
-
-
 
 
 extern ActionManager* g_actionManager;

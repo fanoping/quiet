@@ -57,7 +57,7 @@ void DirectoryManager::appendFile(const QString& fileBasename, const QFileInfo& 
 
 void DirectoryManager::removeFile(const QString& fileBasename)
 {
-
+    Q_UNUSED(fileBasename);
 }
 
 void DirectoryManager::reset()
@@ -164,9 +164,6 @@ QList<QString> DirectoryManager::loadEntryList(QString dir)
            fileList.append(basename);
        }
     }
-
-    // Debug Usage
-    printTree();
 
     return fileList;
 }

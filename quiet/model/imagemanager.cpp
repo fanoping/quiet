@@ -29,16 +29,6 @@ ImageManager* ImageManager::getInstance()
 }
 
 
-
-HashKey ImageManager::load(const QString &path)
-{
-    std::shared_ptr<Image> img = nullptr;
-    img.reset(new Image(path));
-    qDebug() << "img loaded" << path;
-    emit imageLoaded(img);
-    return m_currHashKey++;
-}
-
 HashKey ImageManager::loadImage(const QFileInfo& fileInfo)
 {
     qDebug() << "load image" << fileInfo.absoluteFilePath();

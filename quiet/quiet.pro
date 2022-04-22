@@ -21,8 +21,6 @@ SOURCES += main.cpp\
     model/imagemanager.cpp \
     object/image.cpp \
     model/actionmanager.cpp \
-    view/contextmenu.cpp \
-    view/contextmenuitem.cpp \
     view/gallarypanel.cpp \
     object/node.cpp \
     view/gallaryitem.cpp \
@@ -39,8 +37,6 @@ HEADERS  += \
     model/imagemanager.h \
     object/image.h \
     model/actionmanager.h \
-    view/contextmenu.h \
-    view/contextmenuitem.h \
     util/constants.h \
     view/gallarypanel.h \
     object/node.h \
@@ -50,7 +46,6 @@ HEADERS  += \
     settings.h \
     core/core.h
 
-FORMS += \
-    view/contextmenu.ui
+FORMS +=
 
 

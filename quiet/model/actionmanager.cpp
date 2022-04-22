@@ -26,34 +26,14 @@ void ActionManager::initShortCuts()
 }
 
 
-// signals
-// action publisher
-
-
-
-
 // public slots
 
-bool ActionManager::actionReceived(const QString &actionName)
+bool ActionManager::actionReceiver(const QAction* action)
 {
-    // true: action invoked
-    // false: invoke failed
-    qDebug() << actionName;
-    return QMetaObject::invokeMethod(this, (actionName + "Received").toLatin1().constData(), Qt::DirectConnection);
-
+    qDebug()<<action->text();
+    bool invoked = QMetaObject::invokeMethod(this, (action->text().toLower()).toLatin1().constData(), Qt::DirectConnection);
+    if(!invoked) {
+        qDebug() << "[Debug] Action Manager" << action->text() << "invoked failed";
+    }
+    return invoked;
 }
-
-
-// private slots
-
-void ActionManager::openActionReceived()
-{
-    qDebug() <<"Open Action Received";
-    emit openActionPublished();
-}
-
-void ActionManager::fileSelectedReceived()
-{
-
-}
-
