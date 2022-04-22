@@ -9,7 +9,6 @@ ThemePalette::ThemePalette():
 ThemePalette::ThemePalette(Theme theme):
     m_theme(theme)
 {
-    qDebug() << "theme check" <<(m_theme == THEME_DARK);
     setupColor();
 }
 

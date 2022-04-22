@@ -6,9 +6,9 @@ Settings::Settings(QObject *parent) : QObject(parent)
 {
     m_themePalette = ThemePalette(THEME_DARK);
 //    m_themePalette = ThemePalette(THEME_LIGHT);
+
     m_supportedFormats = QImageReader::supportedImageFormats();
     m_supportedFormats.removeAll("pdf");
-    qDebug() << supportedFormatStr();
 }
 
 Settings::~Settings()

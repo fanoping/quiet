@@ -3,8 +3,11 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QMap>
 #include <QAction>
+#include <QMap>
+#include <memory>
+
+#include "object/action.h"
 
 
 class ActionManager : public QObject
@@ -14,14 +17,11 @@ public:
     static ActionManager* getInstance();
     ~ActionManager();
 
-    QString getActionName(const QString& shortcut) { return m_shortcuts[shortcut]; }
+    Action* cloneAction(const QString& name);
 
 private:
     explicit ActionManager(QObject *parent = 0);
-    QMap<QString, QString> m_shortcuts;  // <shortcut, actionName>
-
-    // initialization
-    static void initShortCuts();
+    QMap<QString, Action*> m_mapName2Action;
 
 signals:
     // methodName = actionName (action.text() or a name mapping required)
@@ -31,7 +31,7 @@ signals:
 public slots:
     // Wrapper class to invoke corresponding signals
     // Make sure that always consistent to invoke the right method
-    bool actionReceiver(const QAction* action);
+    bool actionReceiver(QAction* action);
 
 };
 

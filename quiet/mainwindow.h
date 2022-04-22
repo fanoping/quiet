@@ -17,7 +17,7 @@
 
 #include "model/directorymanager.h"
 #include "model/actionmanager.h"
-//#include "view/contextmenu.h"
+#include "object/action.h"
 
 
 
@@ -38,27 +38,30 @@ public:
 
 
 private:
-     // constructor
      explicit MainWindow(QWidget *parent = 0);
 
     // Layout Settings
-    QHBoxLayout layout;
     std::shared_ptr<CentralWidget> centralWidget;
-//    std::unique_ptr<ContextMenu> contextMenu;
 
-    QMenu* file;
-    QMenu* contextMenu;
     /////////////////
     void initAttibutes();
     static void initConnect();
     void initLayout();
+
+    // Menus
+    std::unique_ptr<QMenu> m_fileMenu;
+    std::unique_ptr<QMenu> m_contextMenu;
+
+    // Build Menus
+    void buildFileMenu();
+    void buildContextMenu();
+    void buildMenuBar();
 
 
 signals:
 
 public slots:
     void showOpenDialog();
-
 
 protected:
     void mousePressEvent(QMouseEvent *event);

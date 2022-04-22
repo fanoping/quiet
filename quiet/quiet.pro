@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     view/gallaryitem.cpp \
     util/themepalette.cpp \
     settings.cpp \
-    core/core.cpp
+    core/core.cpp \
+    object/action.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS  += \
     view/gallaryitem.h \
     util/themepalette.h \
     settings.h \
-    core/core.h
+    core/core.h \
+    object/action.h
 
 FORMS +=
 

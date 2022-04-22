@@ -4,6 +4,7 @@
 #define UTILS
 
 #include "stdint.h"
+#include <QAction>
 
 typedef uint8_t HashKey;
 

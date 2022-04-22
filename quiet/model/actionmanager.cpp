@@ -7,31 +7,34 @@ ActionManager::ActionManager(QObject *parent) : QObject(parent)
 
 }
 
-ActionManager::~ActionManager() {
+ActionManager::~ActionManager()
+{
+
 }
 
 ActionManager* ActionManager::getInstance()
 {
     if (!g_actionManager) {
         g_actionManager = new ActionManager();
-        initShortCuts();
     }
     return g_actionManager;
 }
 
-// private
-void ActionManager::initShortCuts()
+Action* ActionManager::cloneAction(const QString& name)
 {
-    g_actionManager->m_shortcuts.insert("Ctrl+O", "open");
+    if(m_mapName2Action.contains(name)) {
+        return m_mapName2Action[name];
+    } else {
+        Action* action = new Action(name);
+        m_mapName2Action[name] = action;
+        return action;
+    }
 }
 
-
-// public slots
-
-bool ActionManager::actionReceiver(const QAction* action)
+bool ActionManager::actionReceiver(QAction* action)
 {
-    qDebug()<<action->text();
-    bool invoked = QMetaObject::invokeMethod(this, (action->text().toLower()).toLatin1().constData(), Qt::DirectConnection);
+    Action* receivedAction = dynamic_cast<Action*>(action);
+    bool invoked = QMetaObject::invokeMethod(this, (receivedAction->name().toLower()).toLatin1().constData(), Qt::DirectConnection);
     if(!invoked) {
         qDebug() << "[Debug] Action Manager" << action->text() << "invoked failed";
     }
