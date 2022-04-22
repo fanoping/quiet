@@ -1,4 +1,5 @@
 # QUIET
 
-Qt-based Universal Image Editing Tool
-(under development)
+Qt-based Universal Image EdiTor
+
+
