@@ -37,11 +37,11 @@ public:
      *
      */
 
-    explicit GallaryItem(QGraphicsItem *parent = 0);
+    // explicit GallaryItem(QGraphicsItem *parent = 0);
     explicit GallaryItem(const QString& entryStr="", QGraphicsItem *parent = 0);
     ~GallaryItem();
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     // Geometry Settings
     void setSize(int size);

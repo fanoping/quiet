@@ -1,15 +1,15 @@
 #include "gallaryitem.h"
 
-GallaryItem::GallaryItem(QGraphicsItem *parent):
-    QGraphicsWidget(parent),
-    m_entryStr(""),
-    m_size(128),
-    m_paddingSize(0),
-    m_hovered(false),
-    m_selected(false)
-{
-    initAttributes();
-}
+// GallaryItem::GallaryItem(QGraphicsItem *parent):
+//     QGraphicsWidget(parent),
+//     m_entryStr(""),
+//     m_size(128),
+//     m_paddingSize(0),
+//     m_hovered(false),
+//     m_selected(false)
+// {
+//     initAttributes();
+// }
 
 GallaryItem::GallaryItem(const QString& entryStr, QGraphicsItem *parent):
     QGraphicsWidget(parent),

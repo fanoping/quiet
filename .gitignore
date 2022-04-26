@@ -2,3 +2,7 @@ build*/
 *.user
 *.autosave
 .DS_Store
+.vscode/
+*.pro
+*.xcodeproj
+img/

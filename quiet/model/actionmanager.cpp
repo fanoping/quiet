@@ -4,7 +4,7 @@ ActionManager* g_actionManager = nullptr;
 
 ActionManager::ActionManager(QObject *parent) : QObject(parent)
 {
-
+    initActionAttributes();
 }
 
 ActionManager::~ActionManager()
@@ -20,23 +20,31 @@ ActionManager* ActionManager::getInstance()
     return g_actionManager;
 }
 
-Action* ActionManager::cloneAction(const QString& name)
+bool ActionManager::cloneAction(const QString& name, ActionAttributes& attributes)
 {
-    if(m_mapName2Action.contains(name)) {
-        return m_mapName2Action[name];
-    } else {
-        Action* action = new Action(name);
-        m_mapName2Action[name] = action;
-        return action;
+    if(!m_name2attributes.contains(name)) {
+        return false;
     }
+
+    attributes = m_name2attributes[name];
+    return true;
 }
 
 bool ActionManager::actionReceiver(QAction* action)
 {
     Action* receivedAction = dynamic_cast<Action*>(action);
-    bool invoked = QMetaObject::invokeMethod(this, (receivedAction->name().toLower()).toLatin1().constData(), Qt::DirectConnection);
+    bool invoked = QMetaObject::invokeMethod(this, (receivedAction->name()).toLatin1().constData(), Qt::DirectConnection);
     if(!invoked) {
-        qDebug() << "[Debug] Action Manager" << action->text() << "invoked failed";
+        qDebug() << "[Debug] Action Manager" << receivedAction->name() << "invoked failed";
     }
     return invoked;
+}
+
+void ActionManager::initActionAttributes()
+{
+    // open
+    ActionAttributes openAttribute = ActionAttributes();
+    openAttribute.text = "Open";
+    openAttribute.shortcut = tr("Ctrl+O");
+    m_name2attributes["open"] = openAttribute;
 }

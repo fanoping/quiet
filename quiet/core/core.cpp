@@ -12,6 +12,8 @@ Core::Core(int &argc, char **argv):
     g_imageManager = ImageManager::getInstance();
 
     g_mainWindow = MainWindow::getInstance();
+
+    qApp->processEvents();
 }
 
 Core::~Core()

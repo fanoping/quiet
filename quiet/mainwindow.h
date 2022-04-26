@@ -20,7 +20,6 @@
 #include "object/action.h"
 
 
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -57,6 +56,11 @@ private:
     void buildContextMenu();
     void buildMenuBar();
 
+    Action* buildSingleAction(const QString& actionName);
+
+    // Actions
+    // Storage of action objects
+    QList<Action*> m_actionList; 
 
 signals:
 
@@ -64,7 +68,7 @@ public slots:
     void showOpenDialog();
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
     void contextMenuEvent(QContextMenuEvent* event) override;
 
 };

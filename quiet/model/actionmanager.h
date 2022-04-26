@@ -5,9 +5,20 @@
 #include <QDebug>
 #include <QAction>
 #include <QMap>
-#include <memory>
+#include <QString>
+#include <QKeySequence>
 
 #include "object/action.h"
+
+
+struct ActionAttributes {
+    
+    ActionAttributes() {}
+    ~ActionAttributes() {}
+
+    QString text;
+    QKeySequence shortcut;
+};
 
 
 class ActionManager : public QObject
@@ -17,11 +28,18 @@ public:
     static ActionManager* getInstance();
     ~ActionManager();
 
-    Action* cloneAction(const QString& name);
+    // Get action attributes, all QAction should be unique 
+    // Cannot be shared with incorrect signals invoked
+    bool cloneAction(const QString& name, ActionAttributes& attributes);
 
 private:
     explicit ActionManager(QObject *parent = 0);
-    QMap<QString, Action*> m_mapName2Action;
+
+    // Action Attribution List
+    QMap<QString, ActionAttributes> m_name2attributes;
+
+    // initialize all available actions
+    void initActionAttributes();
 
 signals:
     // methodName = actionName (action.text() or a name mapping required)

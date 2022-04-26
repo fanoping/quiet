@@ -24,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-
+    foreach(Action* action, m_actionList) {
+        delete action;
+    }
 }
 
 MainWindow* MainWindow::getInstance()
@@ -38,8 +40,6 @@ MainWindow* MainWindow::getInstance()
 
 void MainWindow::initAttibutes()
 {
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
-
     // Receives mouse move events even if no buttons are pressed.
     this->setMouseTracking(true);
 
@@ -68,30 +68,32 @@ void MainWindow::initLayout()
 
 void MainWindow::initConnect()
 {
-    qDebug() << "[Debug] MainWindow.cpp - Initial Connection";
+    qDebug() << "[Debug] MainWindow.cpp - Initial Connection Settings";
 
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::open, g_mainWindow, &MainWindow::showOpenDialog, Qt::UniqueConnection);
-
 }
 
 void MainWindow::buildFileMenu()
 {
     m_fileMenu.reset(new QMenu("File", this));
+    Action* action;
 
-    Action* action = g_actionManager->cloneAction("open");
-    qDebug() <<action->isCheckable();
-    m_fileMenu.get()->addAction(action);
-//    m_fileMenu.get()->addAction(action);
+    if(action = buildSingleAction("open")){      
+        m_fileMenu.get()->addAction(action);
+    }
 
+    connect(m_fileMenu.get(), &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver,  Qt::UniqueConnection);
 }
 
 void MainWindow::buildContextMenu()
 {
     m_contextMenu.reset(new QMenu(this));
+    Action* action;
 
-    // Actions
-    m_contextMenu->addAction(g_actionManager->cloneAction("open"));
+    if(action = buildSingleAction("open")) {
+        m_contextMenu.get()->addAction(action);
+    }
 
     connect(m_contextMenu.get(), &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver,  Qt::UniqueConnection);
 }
@@ -116,12 +118,20 @@ void MainWindow::buildMenuBar()
     this->menuBar()->addMenu(m_fileMenu.get());
 }
 
+Action* MainWindow::buildSingleAction(const QString& actionName)
+{
+    ActionAttributes attributes;
+    if(!g_actionManager->cloneAction(actionName, attributes)) return nullptr;
+    
+    Action* action = new Action(actionName, attributes.text);
+    action->setShortcut(attributes.shortcut);
 
-// private slots
 
-//
-// Open File Dialog Window
-//
+    m_actionList.append(action);
+    
+    return action;
+}
+
 
 void MainWindow::showOpenDialog()
 {
