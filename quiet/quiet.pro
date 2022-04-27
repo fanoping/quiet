@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     util/themepalette.cpp \
     settings.cpp \
     core/core.cpp \
-    object/action.cpp
+    object/action.cpp \ 
+    appversion.cpp \
+    view/dialog/settingsdialog.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -46,7 +48,9 @@ HEADERS  += \
     util/themepalette.h \
     settings.h \
     core/core.h \
-    object/action.h
+    object/action.h \
+    appversion.h \
+    view/dialog/settingsdialog.h
 
 FORMS +=
 

@@ -36,15 +36,12 @@ public:
     QList<QString> query(const QString &queryStr=QString(""));
 
 
-
 private:
     explicit DirectoryManager(QObject *parent = 0);
     // Current Directory
     QString m_directory;
 
-    // Store loaded entryList (file / directory)
     // TODO: currently only first layer
-
     // load entry list from directory
     QList<QString> loadEntryList(QString dir);
 

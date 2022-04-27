@@ -26,9 +26,6 @@ void ImagePanel::initAttributes()
 
     // Remove White Borders
     this->setFrameShape(QFrame::NoFrame);
-
-    // // Allow Drag Events
-    // this->setDragMode(QGraphicsView::ScrollHandDrag);
 }
 
 void ImagePanel::initConnect()
@@ -40,7 +37,7 @@ void ImagePanel::initConnect()
 void ImagePanel::initLayout()
 {
     m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(-1000, -1000, 2000, 2000);
+    m_scene->setSceneRect(-10000, -10000, 20000, 20000);
     m_scene->setBackgroundBrush(g_settingsManager->themePalette().primaryBackground);
     m_scene->addItem(&m_pixmapItem);
 
@@ -138,6 +135,7 @@ void ImagePanel::mousePressEvent(QMouseEvent* event)
 void ImagePanel::mouseMoveEvent(QMouseEvent* event)
 {
     if(event->buttons() & Qt::LeftButton) {
+        // Not working, wierd
         if(cursor().shape() != Qt::ClosedHandCursor) {
             setCursor(Qt::ClosedHandCursor);
         }

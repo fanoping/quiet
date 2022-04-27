@@ -9,8 +9,8 @@
 
 //
 // TODOs:
-// - move style sheet to settings (or theme palette)
-//
+// - move ContextMent Event to child widgets
+// 
 
 MainWindow* g_mainWindow = nullptr;
 
@@ -48,6 +48,9 @@ void MainWindow::initAttibutes()
 
     // Set minimum window size (Minimum size after resizing)
     this->setMinimumSize(800, 600);
+
+    // Set Window Title
+    this->setWindowTitle(QCoreApplication::applicationName() + " v" + QCoreApplication::applicationVersion());
 }
 
 void MainWindow::initLayout()
@@ -108,10 +111,25 @@ void MainWindow::buildContextMenu()
 {
     m_contextMenu.reset(new QMenu(this));
     Action* action;
+    
 
     if(action = buildSingleAction("open")) {
         m_contextMenu.get()->addAction(action);
     }
+    
+    // Menu
+    QMenu* viewMenu = new QMenu("View", this);
+    if(action = buildSingleAction("zoomIn")) {
+        viewMenu->addAction(action);
+    }
+
+    if(action = buildSingleAction("zoomOut")) {
+        viewMenu->addAction(action);
+    }
+    
+    m_contextMenu.get()->addSeparator();
+    m_contextMenu.get()->addMenu(viewMenu);
+    
     connect(m_contextMenu.get(), &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver,  Qt::UniqueConnection);
 }
 
@@ -174,7 +192,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
-
     if(m_contextMenu) {
         QMainWindow::contextMenuEvent(event);
         m_contextMenu->popup(event->globalPos());

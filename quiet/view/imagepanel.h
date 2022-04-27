@@ -46,6 +46,7 @@ private:
     // zoom Event
     qreal m_scale;
     QPointF m_currViewportCenter; // To keep track of zoom anchor
+    QPoint m_mouseMoveStartPos; // To keep track of mouse dragging pos
 
     void zoomIn(const QPointF &pos);
     void zoomOut(const QPointF &pos);
@@ -57,20 +58,13 @@ protected:
     // Mouse Events
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-
-    QPoint m_mouseMoveStartPos;
+    void mouseReleaseEvent(QMouseEvent* event) override; 
 
     // Enter Events (when mouse moves in (hover on) the widget or something enters)
     void enterEvent(QEvent* event) override;
 
     // Resize Window Event
     void resizeEvent(QResizeEvent* event) override;
-
-    
-
-    
-
 
 signals:
  

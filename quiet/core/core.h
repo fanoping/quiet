@@ -13,6 +13,7 @@
 #include "model/directorymanager.h"
 #include "mainwindow.h"
 #include "settings.h"
+#include "appversion.h"
 
 class Core: public QApplication
 {
