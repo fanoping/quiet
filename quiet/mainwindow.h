@@ -49,10 +49,12 @@ private:
 
     // Menus
     std::unique_ptr<QMenu> m_fileMenu;
+    std::unique_ptr<QMenu> m_viewMenu;
     std::unique_ptr<QMenu> m_contextMenu;
 
     // Build Menus
     void buildFileMenu();
+    void buildViewMenu();
     void buildContextMenu();
     void buildMenuBar();
 

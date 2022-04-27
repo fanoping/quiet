@@ -45,6 +45,9 @@ signals:
     // methodName = actionName (action.text() or a name mapping required)
     void open();
 
+    void zoomIn();
+    void zoomOut();
+
 
 public slots:
     // Wrapper class to invoke corresponding signals

@@ -27,13 +27,14 @@ void ImagePanel::initAttributes()
     // Remove White Borders
     this->setFrameShape(QFrame::NoFrame);
 
-    // Allow Drag Events
-    this->setDragMode(QGraphicsView::ScrollHandDrag);
+    // // Allow Drag Events
+    // this->setDragMode(QGraphicsView::ScrollHandDrag);
 }
 
 void ImagePanel::initConnect()
 {
-
+    connect(g_actionManager, &ActionManager::zoomIn, this, &ImagePanel::zoomInReceiver);
+    connect(g_actionManager, &ActionManager::zoomOut, this, &ImagePanel::zoomOutReceiver);
 }
 
 void ImagePanel::initLayout()
@@ -56,32 +57,36 @@ void ImagePanel::reset()
 {
     m_pixmapItem.setPixmap(QPixmap());
     m_pixmap.reset();
-    m_scale = 1.0;
     centerOn(sceneRect().center());
 }
 
-
-void ImagePanel::zoomIn(const QPoint& pos)
+void ImagePanel::zoomInReceiver()
 {
-    if(underMouse()) {
-        m_scale = m_scale * 1.1;
-        m_pixmapItem.setScale(m_scale);
-                
-        m_currViewportCenter = mapToScene(pos);        
-        QGraphicsView::centerOn(m_currViewportCenter);
-    }
+    zoomIn(m_currViewportCenter);
 }
 
-void ImagePanel::zoomOut(const QPoint& pos)
+void ImagePanel::zoomOutReceiver()
+{
+    zoomOut(m_currViewportCenter);
+}
+
+void ImagePanel::zoomIn(const QPointF& pos)
+{
+    m_scale = qMin(m_scale * 1.1, 4.0);
+    m_pixmapItem.setScale(m_scale);
+
+    m_currViewportCenter = pos;                 
+    QGraphicsView::centerOn(pos);
+}
+
+void ImagePanel::zoomOut(const QPointF& pos)
 {
     if(m_scale <= 1.0) return;
-    if(underMouse()) {
-        m_scale = qMax(m_scale / 1.1, 1.0);
-        m_pixmapItem.setScale(m_scale);
+    m_scale = qMax(m_scale / 1.1, 1.0);
+    m_pixmapItem.setScale(m_scale);
 
-        m_currViewportCenter = mapToScene(pos);        
-        QGraphicsView::centerOn(m_currViewportCenter);
-    }
+    m_currViewportCenter = pos;        
+    QGraphicsView::centerOn(m_currViewportCenter);
 }
 
 void ImagePanel::wheelEvent(QWheelEvent *event)
@@ -107,15 +112,42 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
     } else if ( event->modifiers() == Qt::ControlModifier) {
         event->accept();
         int deltaY = event->angleDelta().ry();
-        qDebug() << deltaY;
         if (deltaY > 0) {
-            zoomIn(event->pos());
+            zoomIn(mapToScene(event->pos()));
         } else if (deltaY < 0) {
-            zoomOut(event->pos());
+            zoomOut(mapToScene(event->pos()));
         }
-
     } else {
         event->ignore();
+    }
+}
+
+void ImagePanel::mousePressEvent(QMouseEvent* event)
+{
+    if(!m_pixmap) {
+        QGraphicsView::mousePressEvent(event);
+        return;
+    }
+    if(event->button() & Qt::LeftButton) {
+        m_mouseMoveStartPos = event->pos();
+    } else {
+        QGraphicsView::mousePressEvent(event);
+    }
+}
+
+void ImagePanel::mouseMoveEvent(QMouseEvent* event)
+{
+    if(event->buttons() & Qt::LeftButton) {
+        if(cursor().shape() != Qt::ClosedHandCursor) {
+            setCursor(Qt::ClosedHandCursor);
+        }
+
+        m_mouseMoveStartPos -= event->pos();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() + m_mouseMoveStartPos.x());
+        verticalScrollBar()->setValue(verticalScrollBar()->value() + m_mouseMoveStartPos.y());
+
+        m_mouseMoveStartPos = event->pos();
+        m_currViewportCenter = mapToScene(viewport()->rect().center());
     }
 }
 
@@ -137,11 +169,6 @@ void ImagePanel::resizeEvent(QResizeEvent* event)
     QGraphicsView::centerOn(m_currViewportCenter);
 }
 
-/*
-
-  Public Slots
-
-*/
 
 void ImagePanel::loadImage(const QString& mainEntry)
 {
@@ -163,4 +190,6 @@ void ImagePanel::showImage(HashKey key)
     m_pixmapItem.setTransformationMode(Qt::SmoothTransformation);
     m_pixmapItem.show();
 
+    m_currViewportCenter = QPointF(0, 0);
+    QGraphicsView::centerOn(m_currViewportCenter);
 }

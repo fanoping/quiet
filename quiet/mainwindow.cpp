@@ -54,6 +54,7 @@ void MainWindow::initLayout()
 {
     // Menu Settings
     buildFileMenu();
+    buildViewMenu();
     buildContextMenu();
 
     // MenuBar Settings
@@ -86,6 +87,23 @@ void MainWindow::buildFileMenu()
     connect(m_fileMenu.get(), &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver,  Qt::UniqueConnection);
 }
 
+void MainWindow::buildViewMenu()
+{
+    m_viewMenu.reset(new QMenu("View", this));
+    Action* action;
+
+    if(action = buildSingleAction("zoomIn")) {
+        m_viewMenu.get()->addAction(action);
+    }
+
+    if(action = buildSingleAction("zoomOut")) {
+        m_viewMenu.get()->addAction(action);
+    }
+    m_viewMenu.get()->addSeparator();
+
+    connect(m_viewMenu.get(), &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver,  Qt::UniqueConnection);
+}
+
 void MainWindow::buildContextMenu()
 {
     m_contextMenu.reset(new QMenu(this));
@@ -94,7 +112,6 @@ void MainWindow::buildContextMenu()
     if(action = buildSingleAction("open")) {
         m_contextMenu.get()->addAction(action);
     }
-
     connect(m_contextMenu.get(), &QMenu::triggered, g_actionManager, &ActionManager::actionReceiver,  Qt::UniqueConnection);
 }
 
@@ -116,13 +133,14 @@ void MainWindow::buildMenuBar()
     this->menuBar()->setStyleSheet(style);
 
     this->menuBar()->addMenu(m_fileMenu.get());
+    this->menuBar()->addMenu(m_viewMenu.get());
 }
 
 Action* MainWindow::buildSingleAction(const QString& actionName)
 {
     ActionAttributes attributes;
     if(!g_actionManager->cloneAction(actionName, attributes)) return nullptr;
-    
+    qDebug() << actionName;
     Action* action = new Action(actionName, attributes.text);
     action->setShortcut(attributes.shortcut);
 

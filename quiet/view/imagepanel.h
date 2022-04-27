@@ -11,6 +11,7 @@
 #include <QScrollBar>
 #include <QList>
 
+#include "model/actionmanager.h"
 #include "model/directorymanager.h"
 #include "model/imagemanager.h"
 #include "object/image.h"
@@ -45,16 +46,20 @@ private:
     // zoom Event
     qreal m_scale;
     QPointF m_currViewportCenter; // To keep track of zoom anchor
-    void zoomIn(const QPoint &pos);
-    void zoomOut(const QPoint &pos);
 
+    void zoomIn(const QPointF &pos);
+    void zoomOut(const QPointF &pos);
 
 protected:
     // Wheel Events
     void wheelEvent(QWheelEvent* event) override;
   
     // Mouse Events
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
+
+    QPoint m_mouseMoveStartPos;
 
     // Enter Events (when mouse moves in (hover on) the widget or something enters)
     void enterEvent(QEvent* event) override;
@@ -64,13 +69,17 @@ protected:
 
     
 
+    
+
 
 signals:
-
+ 
 
 public slots:
     void loadImage(const QString&);
 
+    void zoomInReceiver();
+    void zoomOutReceiver();
 };
 
 #endif // IMAGEPANEL_H

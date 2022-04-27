@@ -42,9 +42,23 @@ bool ActionManager::actionReceiver(QAction* action)
 
 void ActionManager::initActionAttributes()
 {
+    // File Menu related
     // open
     ActionAttributes openAttribute = ActionAttributes();
     openAttribute.text = "Open";
     openAttribute.shortcut = tr("Ctrl+O");
     m_name2attributes["open"] = openAttribute;
+
+    // View Menu Related
+    // zoomIn
+    ActionAttributes zoomInAttribute = ActionAttributes();
+    zoomInAttribute.text = "Zoom In";
+    zoomInAttribute.shortcut = tr("Ctrl++");
+    m_name2attributes["zoomIn"] = zoomInAttribute;
+
+    // zoomOut
+    ActionAttributes zoomOutAttribute = ActionAttributes();
+    zoomOutAttribute.text = "Zoom Out";
+    zoomOutAttribute.shortcut = tr("Ctrl+-");
+    m_name2attributes["zoomOut"] = zoomOutAttribute;
 }
