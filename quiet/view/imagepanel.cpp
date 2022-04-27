@@ -5,7 +5,8 @@
 
 
 ImagePanel::ImagePanel(QWidget *parent) : QGraphicsView(parent),
-    m_scale(1.0)
+    m_scale(1.0),
+    m_currViewportCenter(QPointF(0, 0))
 {
     initLayout();
     initAttributes();
@@ -60,30 +61,28 @@ void ImagePanel::reset()
 }
 
 
-void ImagePanel::zoom(qreal scaler, const QPoint &pos)
+void ImagePanel::zoomIn(const QPoint& pos)
 {
-   qDebug() << m_scale;
-   qDebug() << scaler;
-   if(underMouse()) {
-       scaler = qMax(scaler, 1.0);  // Move out scaling parameter
-       if ( scaler != m_scale) {
-           m_scale = scaler;
-           m_pixmapItem.setScale(m_scale);
-
-           QPointF scenePos = mapToScene(pos);
-           QPointF move = mapFromScene(scenePos) - pos;
-           qDebug() << "Move" << move;
-//           centerOn(newCenter);
-           horizontalScrollBar()->setValue(move.x() + horizontalScrollBar()->value());
-           verticalScrollBar()->setValue(move.y() + verticalScrollBar()->value());
-       }
-   }
+    if(underMouse()) {
+        m_scale = m_scale * 1.1;
+        m_pixmapItem.setScale(m_scale);
+                
+        m_currViewportCenter = mapToScene(pos);        
+        QGraphicsView::centerOn(m_currViewportCenter);
+    }
 }
 
+void ImagePanel::zoomOut(const QPoint& pos)
+{
+    if(m_scale <= 1.0) return;
+    if(underMouse()) {
+        m_scale = qMax(m_scale / 1.1, 1.0);
+        m_pixmapItem.setScale(m_scale);
 
-/*
-   Mouse Events
-*/
+        m_currViewportCenter = mapToScene(pos);        
+        QGraphicsView::centerOn(m_currViewportCenter);
+    }
+}
 
 void ImagePanel::wheelEvent(QWheelEvent *event)
 {
@@ -103,19 +102,6 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
      * ------------------------------------
      */
 
-
-    //
-//    qDebug() << cursor().pos();
-//    qDebug() << mapFromGlobal(cursor().pos());
-//    qDebug() <<this->mapToGlobal(this->pos());
-//    qDebug() <<event->pos();
-//    qDebug() << m_pixmapItem.boundingRect().width();
-//    qDebug() << m_pixmapItem.boundingRect().height();
-
-//    qDebug() << mapToScene(event->pos());
-
-
-
     if( event->modifiers() & Qt::ShiftModifier){
 
     } else if ( event->modifiers() == Qt::ControlModifier) {
@@ -123,9 +109,9 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
         int deltaY = event->angleDelta().ry();
         qDebug() << deltaY;
         if (deltaY > 0) {
-            zoom(m_scale * 1.1, event->pos());
+            zoomIn(event->pos());
         } else if (deltaY < 0) {
-            zoom(m_scale / 1.1, event->pos());
+            zoomOut(event->pos());
         }
 
     } else {
@@ -148,7 +134,7 @@ void ImagePanel::enterEvent(QEvent* event)
 void ImagePanel::resizeEvent(QResizeEvent* event)
 {
     QGraphicsView::resizeEvent(event);
-    QGraphicsView::centerOn(QPointF(0,0));
+    QGraphicsView::centerOn(m_currViewportCenter);
 }
 
 /*

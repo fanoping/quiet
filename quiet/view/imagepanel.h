@@ -32,11 +32,6 @@ private:
 
     // reset before any display method
     void reset();
-
-    // zoom Event
-    qreal m_scale;
-    void zoom(qreal scaler, const QPoint &pos);
-
     void showImage(HashKey key);
 
 
@@ -47,7 +42,11 @@ private:
     void initConnect();
     void initLayout();
 
-
+    // zoom Event
+    qreal m_scale;
+    QPointF m_currViewportCenter; // To keep track of zoom anchor
+    void zoomIn(const QPoint &pos);
+    void zoomOut(const QPoint &pos);
 
 
 protected:
@@ -56,6 +55,7 @@ protected:
   
     // Mouse Events
     void mouseReleaseEvent(QMouseEvent* event) override;
+
     // Enter Events (when mouse moves in (hover on) the widget or something enters)
     void enterEvent(QEvent* event) override;
 

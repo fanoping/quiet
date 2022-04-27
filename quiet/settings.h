@@ -21,6 +21,7 @@ public:
 
 private:
     explicit Settings(QObject *parent = 0);
+    
     // Theme Palette, defines color etc...
     ThemePalette m_themePalette;
 
