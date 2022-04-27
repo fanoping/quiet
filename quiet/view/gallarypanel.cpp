@@ -17,7 +17,6 @@ GallaryPanel::GallaryPanel(QWidget *parent) :
     initSettings();
     initLayout();
     initAttributes();
-    m_scrollBar = this->horizontalScrollBar();
     initConnect();
 }
 
@@ -60,8 +59,9 @@ void GallaryPanel::initAttributes()
     // Remove white borders around QGraphicsWidget
     this->setFrameShape(QFrame::NoFrame);
 
-    // Size for gallaryItem
-    this->setMinimumHeight(176);
+    // Size for gallaryItem (size + horizontal Scrollbar size)
+    // qDebug() <<this->horizontalScrollBar()->height(); // 30
+    this->setMinimumHeight(176 + 15);
 }
 
 
@@ -70,7 +70,7 @@ void GallaryPanel::initConnect()
     connect(g_directoryManager, &DirectoryManager::directoryInitialized, this, &GallaryPanel::loadGallaryItems);
 
     // connect scrollbar indicator
-    connect(m_scrollBar, &QScrollBar::valueChanged, this, &GallaryPanel::loadVisibleThumbnails);
+    connect(this->horizontalScrollBar(), &QScrollBar::valueChanged, this, &GallaryPanel::loadVisibleThumbnails);
 }
 
 void GallaryPanel::initLayout()
@@ -216,6 +216,16 @@ void GallaryPanel::mousePressEvent(QMouseEvent *event)
 
     QGraphicsView::mousePressEvent(event);
 }
+
+void GallaryPanel::wheelEvent(QWheelEvent *event)
+{
+    // this->horizontalScrollBar().wheelEvent(event);
+    event->accept();
+    int angleDelta = event->angleDelta().y();
+    QPointF center = mapToScene(viewport()->rect().center());
+    QGraphicsView::centerOn(center.x() - angleDelta, center.y());
+}
+
 
 void GallaryPanel::resizeEvent(QResizeEvent *event)
 {

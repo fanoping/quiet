@@ -22,7 +22,7 @@ private:
     QVBoxLayout m_layout;
     QGraphicsScene* m_scene;
     QList<GallaryItem*> m_gallaryItems;
-    QScrollBar* m_scrollBar;
+    // QScrollBar* m_scrollBar;
 
     void loadVisibleThumbnails();
 
@@ -76,11 +76,14 @@ private:
 
 
 protected:
-   // Mouse Events
-   void mousePressEvent(QMouseEvent* event) override;
+    // Mouse Events
+    void mousePressEvent(QMouseEvent* event) override;
 
-   // Window Resize
-   void resizeEvent(QResizeEvent* event) override;
+    // Wheel
+    void wheelEvent(QWheelEvent* event) override;
+
+    // Window Resize
+    void resizeEvent(QResizeEvent* event) override;
 
 
 signals:
