@@ -47,7 +47,7 @@ void MainWindow::initAttibutes()
     this->setFocusPolicy(Qt::NoFocus);
 
     // Set minimum window size (Minimum size after resizing)
-    this->setMinimumSize(480, 360);
+    this->setMinimumSize(800, 600);
 }
 
 void MainWindow::initLayout()

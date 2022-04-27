@@ -50,9 +50,10 @@ public:
     int getSize();
     int getPaddingSize();
 
+    virtual QRectF boundingRect() const override;
+
     // Selection Settings
     void setSelected(bool select);
-
 
 
     QString getStr() { return m_entryStr; }
@@ -61,58 +62,58 @@ private:
     void initAttributes();
 
     QString m_entryStr;
-   std::unique_ptr<QPixmap> m_pixmap;
+    std::unique_ptr<QPixmap> m_pixmap;
 
-   /////////////////////////////////////////
+    /////////////////////////////////////////
 
-   // Containers which diaplay info
-   QRectF m_boundingRect;
-   QRect m_contentRect;
-   QRect m_filenameRect;
+    // Containers which diaplay info
+    QRectF m_boundingRect;
+    QRect m_contentRect;
+    QRect m_filenameRect;
 
-   // Attributes
-   int m_size;
-   int m_paddingSize;
-   int m_textHeight;
+    // Attributes
+    int m_size;
+    int m_paddingSize;
+    int m_textHeight;
 
-   QFont font;
+    QFont font;
 
-   // Collection of Status
-   // Hover
-   bool m_hovered;
+    // Collection of Status
+    // Hover
+    bool m_hovered;
 
-   // Selection
-   bool m_selected;
+    // Selection
+    bool m_selected;
 
-    // Update methods when initial creation or recreation occurs
-   // - file insertion or removed
-   // - resize event (window size)
-   // - padding size / item size changes
+        // Update methods when initial creation or recreation occurs
+    // - file insertion or removed
+    // - resize event (window size)
+    // - padding size / item size changes
 
-   // Notifies the layout system that this widget has changed
-   void updateGeometry() override;
+    // Notifies the layout system that this widget has changed
+    void updateGeometry() override;
 
-   // Update Item Bounds
-   void updateBoundingRect();
+    // Update Item Bounds
+    void updateBoundingRect();
 
-   // Update Drawing Position
-   void updateDrawPosition();
+    // Update Drawing Position
+    void updateDrawPosition();
 
-   // Update Filename Position
-   void updateFilenamePosition();
+    // Update Filename Position
+    void updateFilenamePosition();
 
-   // Drawing function - induced by paint function
-   void drawContent(QPainter* painter);
-   void drawHoverBackground(QPainter* painter);
-   void drawSelectBackground(QPainter* painter);
-   void drawFilename(QPainter* painter);
+    // Drawing function - induced by paint function
+    void drawContent(QPainter* painter);
+    void drawHoverBackground(QPainter* painter);
+    void drawSelectBackground(QPainter* painter);
+    void drawFilename(QPainter* painter);
 
-   // Size hint: to make parent class access to its size attribute by using itemsboundingRect
-   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
+    // Size hint: to make parent class access to its size attribute by using itemsboundingRect
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
 
-   // Hover Events
-   void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
-   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+    // Hover Events
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 
 

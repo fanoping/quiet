@@ -59,6 +59,9 @@ void GallaryPanel::initAttributes()
 
     // Remove white borders around QGraphicsWidget
     this->setFrameShape(QFrame::NoFrame);
+
+    // Size for gallaryItem
+    this->setMinimumHeight(176);
 }
 
 
@@ -77,7 +80,6 @@ void GallaryPanel::initLayout()
 
     // Scene Setups
     m_scene = new QGraphicsScene();
-    m_scene->setSceneRect(0, 0, 1000, 500);
     m_scene->setBackgroundBrush(g_settingsManager->themePalette().secondaryBackground);
     this->setScene(m_scene);
 }
@@ -99,18 +101,17 @@ void GallaryPanel::updateGallaryItemPositions(int start, int end)
     if(m_gallaryItems.empty()) return;
 
 
-    for(int idx = start; idx <= end; idx++){
-        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 2 * (m_gallaryItemPaddingSize + m_gallaryItems[idx]->getPaddingSize())) + m_gallaryItemPaddingSize, m_gallaryItemPaddingSize);
+    for(int idx = start; idx <= end; idx++) {
+        m_gallaryItems[idx]->setPos(idx * (m_gallaryItemSize + 6 * (m_gallaryItemPaddingSize)), 0);
     }
 }
 
 void GallaryPanel::updateSceneSize()
 {
-    int trailingPadding = 8;
-    int width = qMax((int)m_scene->itemsBoundingRect().width(), this->width()) +trailingPadding;
+    int width = qMax((int)m_scene->itemsBoundingRect().width(), this->width());
     int height = qMax((int)m_scene->itemsBoundingRect().height(), this->height());
 
-    m_scene->setSceneRect(0, 0, width, height);
+    m_scene->update(0, 0, width, height);
     QPointF center = mapToScene(viewport()->rect().center());
     QGraphicsView::centerOn(center.x(), 0);
 }
@@ -143,7 +144,7 @@ void GallaryPanel::ensureItemVisible(int pos)
 GallaryItem* GallaryPanel::createGallaryItem(const QString& entryStr)
 {
     GallaryItem* gallaryItem = new GallaryItem(entryStr);
-    gallaryItem->setPaddingSize(2 * m_gallaryItemPaddingSize);
+    gallaryItem->setPaddingSize(m_gallaryItemPaddingSize);
     gallaryItem->setSize(m_gallaryItemSize);
     return gallaryItem;
 }
@@ -219,6 +220,8 @@ void GallaryPanel::mousePressEvent(QMouseEvent *event)
 void GallaryPanel::resizeEvent(QResizeEvent *event)
 {
     QGraphicsView::resizeEvent(event);
+    updateSceneSize();
+    update();
 }
 
 // Public slots

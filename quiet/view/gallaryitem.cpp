@@ -67,6 +67,12 @@ int GallaryItem::getPaddingSize()
     return m_paddingSize;
 }
 
+QRectF GallaryItem::boundingRect() const
+{
+    return m_boundingRect;
+}
+
+
 void GallaryItem::setSelected(bool select)
 {
     m_selected = select;
@@ -75,7 +81,8 @@ void GallaryItem::setSelected(bool select)
 
 void GallaryItem::updateBoundingRect()
 {
-    m_boundingRect = QRectF(0, 0, m_size + 2 * m_paddingSize, m_size + m_textHeight + 4 * m_paddingSize);
+    m_boundingRect = QRectF(0, 0, m_size + 6 * m_paddingSize, m_size + m_textHeight + 8 * m_paddingSize);
+
 }
 
 void GallaryItem::updateGeometry()
@@ -98,14 +105,15 @@ void GallaryItem::updateDrawPosition()
     QPoint topLeft;
 
     topLeft.setX((m_boundingRect.width() - pixmapSize.width()) / 2.0);
-    topLeft.setY((m_boundingRect.height() - pixmapSize.height()) / 2.0 - m_textHeight);
+    topLeft.setY((m_boundingRect.height() - m_textHeight - pixmapSize.height()) / 2.0 - m_paddingSize);
 
     m_contentRect = QRect(topLeft, pixmapSize);
 }
 
 void GallaryItem::updateFilenamePosition()
 {
-    m_filenameRect = QRect(m_paddingSize, m_size + 3 * m_paddingSize, m_size, m_textHeight);
+    // m_filenameRect = QRect(m_paddingSize, m_size + 3 * m_paddingSize, m_size, m_textHeight);
+    m_filenameRect = QRect(3 * m_paddingSize, m_size + 5 * m_paddingSize, m_size, m_textHeight);
 }
 
 void GallaryItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -113,6 +121,7 @@ void GallaryItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+    
     if(!m_pixmap) {
         HashKey key = g_directoryManager->getHashKey(m_entryStr);
         m_pixmap = (*g_imageManager)[key]->getPixmap();
@@ -136,18 +145,19 @@ void GallaryItem::drawContent(QPainter* painter)
 
 void GallaryItem::drawHoverBackground(QPainter* painter)
 {
-    painter->fillRect(m_boundingRect, g_settingsManager->themePalette().tertiaryBackground);
+    painter->fillRect(m_boundingRect.adjusted(m_paddingSize, m_paddingSize, -m_paddingSize, -m_paddingSize), g_settingsManager->themePalette().tertiaryBackground);
 }
 
 void GallaryItem::drawSelectBackground(QPainter *painter)
 {
     painter->setOpacity(0.2);
-    painter->fillRect(m_boundingRect, g_settingsManager->themePalette().themeColor);
+    painter->fillRect(m_boundingRect.adjusted(m_paddingSize, m_paddingSize, -m_paddingSize, -m_paddingSize), g_settingsManager->themePalette().themeColor);
 
-    QPen pen(g_settingsManager->themePalette().themeColor, 1);
+    qreal penWidth = 0.5;
+    QPen pen(g_settingsManager->themePalette().themeColor, penWidth);
     painter->setOpacity(0.3);
     painter->setPen(pen);
-    painter->drawRect(m_boundingRect.adjusted(0.5, 0.5, -0.5, -0.5));
+    painter->drawRect(m_boundingRect.adjusted(m_paddingSize + penWidth, m_paddingSize + penWidth, -m_paddingSize + penWidth, -m_paddingSize + penWidth));
 
     painter->setOpacity(1.0);
 }
@@ -168,7 +178,7 @@ QSizeF GallaryItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
     return m_boundingRect.size();
 }
 
-void GallaryItem::hoverEnterEvent(QGraphicsSceneHoverEvent*event)
+void GallaryItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 {
     event->ignore();
     if(!m_hovered) {
@@ -177,7 +187,7 @@ void GallaryItem::hoverEnterEvent(QGraphicsSceneHoverEvent*event)
     }
 }
 
-void GallaryItem::hoverLeaveEvent(QGraphicsSceneHoverEvent*event)
+void GallaryItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
     event->ignore();
     if(m_hovered) {

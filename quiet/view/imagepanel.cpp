@@ -1,5 +1,9 @@
 #include "imagepanel.h"
 
+
+// TODO: - Resize event after zoom In/Out
+
+
 ImagePanel::ImagePanel(QWidget *parent) : QGraphicsView(parent),
     m_scale(1.0)
 {
@@ -21,6 +25,9 @@ void ImagePanel::initAttributes()
 
     // Remove White Borders
     this->setFrameShape(QFrame::NoFrame);
+
+    // Allow Drag Events
+    this->setDragMode(QGraphicsView::ScrollHandDrag);
 }
 
 void ImagePanel::initConnect()
@@ -123,23 +130,32 @@ void ImagePanel::wheelEvent(QWheelEvent *event)
 
     } else {
         event->ignore();
-        QGraphicsView::wheelEvent(event);
     }
 }
 
+void ImagePanel::mouseReleaseEvent(QMouseEvent* event)
+{
+    QGraphicsView::mouseReleaseEvent(event);
+    viewport()->setCursor(Qt::ArrowCursor);
+}
+
+void ImagePanel::enterEvent(QEvent* event)
+{
+    QGraphicsView::enterEvent(event);
+    viewport()->setCursor(Qt::ArrowCursor);
+}
+
+void ImagePanel::resizeEvent(QResizeEvent* event)
+{
+    QGraphicsView::resizeEvent(event);
+    QGraphicsView::centerOn(QPointF(0,0));
+}
 
 /*
 
   Public Slots
 
 */
-
-//void ImagePanel::loadImage(const QString& mainEntry, const QList<QString>& entryList)
-//{
-//    Q_UNUSED(entryList);
-//    HashKey key = g_directoryManager->getHashKey(mainEntry);
-//    showImage(key);
-//}
 
 void ImagePanel::loadImage(const QString& mainEntry)
 {
@@ -162,6 +178,3 @@ void ImagePanel::showImage(HashKey key)
     m_pixmapItem.show();
 
 }
-
-
-

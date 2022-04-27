@@ -16,6 +16,7 @@
 #include "object/image.h"
 #include "settings.h"
 
+
 class ImagePanel : public QGraphicsView
 {
     Q_OBJECT
@@ -47,9 +48,21 @@ private:
     void initLayout();
 
 
-protected:
-  void wheelEvent(QWheelEvent* event) override;
 
+
+protected:
+    // Wheel Events
+    void wheelEvent(QWheelEvent* event) override;
+  
+    // Mouse Events
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    // Enter Events (when mouse moves in (hover on) the widget or something enters)
+    void enterEvent(QEvent* event) override;
+
+    // Resize Window Event
+    void resizeEvent(QResizeEvent* event) override;
+
+    
 
 
 signals:
