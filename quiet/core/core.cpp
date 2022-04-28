@@ -8,7 +8,7 @@ Core::Core(int &argc, char **argv):
 
     // Setup Application App Name / Version
     QCoreApplication::setApplicationName("QUIET");
-    QCoreApplication::setApplicationVersion(appVersion.toString());
+    QCoreApplication::setApplicationVersion("0.1.0");
 
     // Setup Application
     g_settingsManager = Settings::getInstance();

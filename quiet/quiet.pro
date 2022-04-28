@@ -28,7 +28,6 @@ SOURCES += main.cpp\
     settings.cpp \
     core/core.cpp \
     object/action.cpp \ 
-    appversion.cpp \
     view/dialog/settingsdialog.cpp
 
 HEADERS  += \
@@ -49,7 +48,6 @@ HEADERS  += \
     settings.h \
     core/core.h \
     object/action.h \
-    appversion.h \
     view/dialog/settingsdialog.h
 
 FORMS +=
