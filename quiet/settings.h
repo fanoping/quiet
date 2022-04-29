@@ -7,6 +7,7 @@
 
 #include "util/themepalette.h"
 
+
 class Settings : public QObject
 {
     Q_OBJECT
