@@ -67,12 +67,6 @@ void MainWindow::initLayout()
     // MainWindow only controls Central Widget
     m_centralWidget.reset(new CentralWidget(this));
     this->setCentralWidget(m_centralWidget.get());
-<<<<<<< HEAD
-
-    // Dialog Setups
-    m_settingsDialog.reset(new SettingsDialog(this));
-=======
->>>>>>> 55a915262db9996164f75c69671c99ad9c8dd4e4
 
     // Dialog Setups
     m_settingsDialog.reset(new SettingsDialog(this));
@@ -201,11 +195,8 @@ void MainWindow::showOpenDialog()
 
 void MainWindow::showSettingsDialog()
 {
-<<<<<<< HEAD
-    m_settingsDialog.get()->exec();
-=======
 
->>>>>>> 55a915262db9996164f75c69671c99ad9c8dd4e4
+    m_settingsDialog.get()->exec();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
