@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     settings.cpp \
     core/core.cpp \
     object/action.cpp \ 
-    view/dialog/settingsdialog.cpp
+    view/dialog/settings/settingsdialog.cpp \
+    view/dialog/settings/appearancetab.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS  += \
     settings.h \
     core/core.h \
     object/action.h \
-    view/dialog/settingsdialog.h
+    view/dialog/settings/settingsdialog.h \
+    view/dialog/settings/appearancetab.h
 
 FORMS +=
 

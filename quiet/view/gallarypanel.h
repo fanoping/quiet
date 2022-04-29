@@ -22,7 +22,6 @@ private:
     QVBoxLayout m_layout;
     QGraphicsScene* m_scene;
     QList<GallaryItem*> m_gallaryItems;
-    // QScrollBar* m_scrollBar;
 
     void loadVisibleThumbnails();
 

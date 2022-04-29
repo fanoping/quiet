@@ -49,6 +49,10 @@ void ActionManager::initActionAttributes()
     openAttribute.shortcut = tr("Ctrl+O");
     m_name2attributes["open"] = openAttribute;
 
+    ActionAttributes settingsAttribute = ActionAttributes();
+    settingsAttribute.text = "Settings";
+    m_name2attributes["settings"] = settingsAttribute;
+
     // View Menu Related
     // zoomIn
     ActionAttributes zoomInAttribute = ActionAttributes();

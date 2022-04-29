@@ -65,8 +65,11 @@ void MainWindow::initLayout()
 
     // Layout Settings
     // MainWindow only controls Central Widget
-    centralWidget.reset(new CentralWidget(this));
-    this->setCentralWidget(centralWidget.get());
+    m_centralWidget.reset(new CentralWidget(this));
+    this->setCentralWidget(m_centralWidget.get());
+
+    // Dialog Setups
+    m_settingsDialog.reset(new SettingsDialog(this));
 
 }
 
@@ -76,6 +79,7 @@ void MainWindow::initConnect()
 
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::open, g_mainWindow, &MainWindow::showOpenDialog, Qt::UniqueConnection);
+    connect(g_actionManager, &ActionManager::settings, g_mainWindow, &MainWindow::showSettingsDialog, Qt::UniqueConnection);
 }
 
 void MainWindow::buildFileMenu()
@@ -83,7 +87,13 @@ void MainWindow::buildFileMenu()
     m_fileMenu.reset(new QMenu("File", this));
     Action* action;
 
-    if(action = buildSingleAction("open")){      
+    if(action = buildSingleAction("open")){
+        m_fileMenu.get()->addAction(action);
+    }
+
+    m_fileMenu.get()->addSeparator();
+
+    if(action = buildSingleAction("settings")){
         m_fileMenu.get()->addAction(action);
     }
 
@@ -158,7 +168,7 @@ Action* MainWindow::buildSingleAction(const QString& actionName)
 {
     ActionAttributes attributes;
     if(!g_actionManager->cloneAction(actionName, attributes)) return nullptr;
-    qDebug() << actionName;
+//    qDebug() << actionName;
     Action* action = new Action(actionName, attributes.text);
     action->setShortcut(attributes.shortcut);
 
@@ -184,6 +194,10 @@ void MainWindow::showOpenDialog()
     dialog.exec();
 }
 
+void MainWindow::showSettingsDialog()
+{
+    m_settingsDialog.get()->exec();
+}
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {

@@ -44,6 +44,7 @@ private:
 signals:
     // methodName = actionName (action.text() or a name mapping required)
     void open();
+    void settings();
 
     void zoomIn();
     void zoomOut();

@@ -10,11 +10,10 @@
 #include <QDebug>
 #include <QPalette>
 #include <QContextMenuEvent>
-
-
-#include "view/centralwidget.h"
 #include <memory>  //TODO: handle include memory
 
+#include "view/centralwidget.h"
+#include "view/dialog/settings/settingsdialog.h"
 #include "model/directorymanager.h"
 #include "model/actionmanager.h"
 #include "object/action.h"
@@ -40,7 +39,8 @@ private:
      explicit MainWindow(QWidget *parent = 0);
 
     // Layout Settings
-    std::shared_ptr<CentralWidget> centralWidget;
+    std::shared_ptr<CentralWidget> m_centralWidget;
+    std::unique_ptr<SettingsDialog> m_settingsDialog;
 
     /////////////////
     void initAttibutes();
@@ -68,6 +68,7 @@ signals:
 
 public slots:
     void showOpenDialog();
+    void showSettingsDialog();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
