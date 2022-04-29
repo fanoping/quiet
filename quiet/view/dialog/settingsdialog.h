@@ -14,6 +14,14 @@ public:
     ~SettingsDialog();
 
 
+    int exec() override;
+
+private:
+
+
+    void initAttributes();
+    void initLayout();
+
 };
 
 

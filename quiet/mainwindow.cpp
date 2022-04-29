@@ -65,9 +65,11 @@ void MainWindow::initLayout()
 
     // Layout Settings
     // MainWindow only controls Central Widget
-    centralWidget.reset(new CentralWidget(this));
-    this->setCentralWidget(centralWidget.get());
+    m_centralWidget.reset(new CentralWidget(this));
+    this->setCentralWidget(m_centralWidget.get());
 
+    // Dialog Setups
+    m_settingsDialog.reset(new SettingsDialog(this));
 }
 
 void MainWindow::initConnect()
@@ -158,7 +160,7 @@ Action* MainWindow::buildSingleAction(const QString& actionName)
 {
     ActionAttributes attributes;
     if(!g_actionManager->cloneAction(actionName, attributes)) return nullptr;
-    qDebug() << actionName;
+//    qDebug() << actionName;
     Action* action = new Action(actionName, attributes.text);
     action->setShortcut(attributes.shortcut);
 
@@ -184,6 +186,10 @@ void MainWindow::showOpenDialog()
     dialog.exec();
 }
 
+void MainWindow::showSettingsDialog()
+{
+
+}
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
