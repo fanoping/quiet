@@ -70,6 +70,8 @@ public slots:
     void showOpenDialog();
     void showSettingsDialog();
 
+    void settingsChanged();
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void contextMenuEvent(QContextMenuEvent* event) override;

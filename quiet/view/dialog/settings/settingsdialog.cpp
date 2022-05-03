@@ -30,7 +30,6 @@ void SettingsDialog::initLayout()
     m_apperanceTab.reset(new AppearanceTab(this));
     m_tabbar.get()->addTab(m_apperanceTab.get(), "Appearance");
 
-
     m_layout.addWidget(m_tabbar.get());
     this->setLayout(&m_layout);
 }

@@ -79,6 +79,8 @@ void MainWindow::initConnect()
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::open, g_mainWindow, &MainWindow::showOpenDialog, Qt::UniqueConnection);
     connect(g_actionManager, &ActionManager::settings, g_mainWindow, &MainWindow::showSettingsDialog, Qt::UniqueConnection);
+
+    connect(g_settingsManager, &Settings::settingsChanged, g_mainWindow, &MainWindow::settingsChanged);
 }
 
 void MainWindow::buildFileMenu()
@@ -195,8 +197,12 @@ void MainWindow::showOpenDialog()
 
 void MainWindow::showSettingsDialog()
 {
-
     m_settingsDialog.get()->exec();
+}
+
+void MainWindow::settingsChanged()
+{
+    update();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)

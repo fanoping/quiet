@@ -29,7 +29,7 @@ private:
     std::unique_ptr<AppearanceTab> m_apperanceTab;
 
     void initAttributes();
-    void initLayout();
+    void initLayout();    
 };
 
 

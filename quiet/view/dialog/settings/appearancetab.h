@@ -6,6 +6,10 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QComboBox>
+#include <QDebug>
+
+#include "settings.h"
 
 class AppearanceTab : public QWidget
 {
@@ -17,15 +21,16 @@ public:
 private:
     QFormLayout m_layout;
 
-    QLineEdit* lineEdit;
-    QLineEdit* lineEdit2;
+    QComboBox* m_appearanceSelection;
 
     void initAttributes();
     void initLayout();
+    void initConnect();
 
 signals:
 
 public slots:
+
 };
 
 #endif // APPEARANCETAB_H

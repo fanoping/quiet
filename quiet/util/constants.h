@@ -26,5 +26,7 @@ enum Theme {
     THEME_DARK
 };
 
+Q_DECLARE_METATYPE(Theme);
+
 #endif // CONSTANTS
 
