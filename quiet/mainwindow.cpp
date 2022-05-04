@@ -68,19 +68,18 @@ void MainWindow::initLayout()
     m_centralWidget.reset(new CentralWidget(this));
     this->setCentralWidget(m_centralWidget.get());
 
-    // Dialog Setups
-    m_settingsDialog.reset(new SettingsDialog(this));
 }
 
 void MainWindow::initConnect()
 {
     qDebug() << "[Debug] MainWindow.cpp - Initial Connection Settings";
-
+    qDebug() << g_mainWindow;
     //ActionManager -> MainWindow (Received Action)
     connect(g_actionManager, &ActionManager::open, g_mainWindow, &MainWindow::showOpenDialog, Qt::UniqueConnection);
     connect(g_actionManager, &ActionManager::settings, g_mainWindow, &MainWindow::showSettingsDialog, Qt::UniqueConnection);
 
     connect(g_settingsManager, &Settings::settingsChanged, g_mainWindow, &MainWindow::settingsChanged);
+
 }
 
 void MainWindow::buildFileMenu()
@@ -197,7 +196,16 @@ void MainWindow::showOpenDialog()
 
 void MainWindow::showSettingsDialog()
 {
+    if(!m_settingsDialog) {
+        m_settingsDialog.reset(new SettingsDialog(this));
+        connect(m_settingsDialog.get(), &SettingsDialog::settingsDialogClosed, g_mainWindow, &MainWindow::closeSettingsDialog);
+    }
     m_settingsDialog.get()->exec();
+}
+
+void MainWindow::closeSettingsDialog()
+{
+    m_settingsDialog.reset();
 }
 
 void MainWindow::settingsChanged()

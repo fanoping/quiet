@@ -3,8 +3,12 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QTableWidget>
+#include <QPushButton>
+#include <QStyleOption>
+#include <QCloseEvent>
 #include <memory>
 
 
@@ -21,8 +25,16 @@ public:
 
     int exec() override;
 
+
 private:
+    // a main layout with nested two layout
     QVBoxLayout m_layout;
+
+    // Buttons
+    QHBoxLayout m_buttonLayout;
+    QPushButton* m_buttonOK;
+    QPushButton* m_buttonApply;
+    QPushButton* m_buttonCancel;
 
     // Tabbar (QTabWidget)
     std::unique_ptr<QTabWidget> m_tabbar;
@@ -30,6 +42,14 @@ private:
 
     void initAttributes();
     void initLayout();    
+    void initConnect();
+
+protected:
+    void closeEvent(QCloseEvent* event) override;
+
+signals:
+    void settingsDialogClosed();
+
 };
 
 

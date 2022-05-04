@@ -80,7 +80,7 @@ const QString Settings::supportedFormatRegex() const
 
 void Settings::setThemePalette(int theme)
 {
-
+    qDebug() << theme;
     switch (theme) {
     case THEME_LIGHT:
         m_themePalette.setTheme(THEME_LIGHT);

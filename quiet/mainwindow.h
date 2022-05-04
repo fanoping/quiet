@@ -69,6 +69,7 @@ signals:
 public slots:
     void showOpenDialog();
     void showSettingsDialog();
+    void closeSettingsDialog();
 
     void settingsChanged();
 

@@ -11,6 +11,7 @@ ImagePanel::ImagePanel(QWidget *parent) : QGraphicsView(parent),
     initLayout();
     initAttributes();
     initConnect();
+    loadSettings();
 }
 
 ImagePanel::~ImagePanel()
@@ -30,6 +31,10 @@ void ImagePanel::initAttributes()
 
 void ImagePanel::initConnect()
 {
+    // Settings Changed
+    connect(g_settingsManager, &Settings::settingsChanged, this, &ImagePanel::loadSettings);
+
+    // zoom In/Out Menu Action
     connect(g_actionManager, &ActionManager::zoomIn, this, &ImagePanel::zoomInReceiver);
     connect(g_actionManager, &ActionManager::zoomOut, this, &ImagePanel::zoomOutReceiver);
 }
@@ -38,7 +43,7 @@ void ImagePanel::initLayout()
 {
     m_scene = new QGraphicsScene();
     m_scene->setSceneRect(-10000, -10000, 20000, 20000);
-    m_scene->setBackgroundBrush(g_settingsManager->themePalette().primaryBackground);
+//    m_scene->setBackgroundBrush(g_settingsManager->themePalette().primaryBackground); ////// check if it can be removed
     m_scene->addItem(&m_pixmapItem);
 
     m_pixmapItem.setScale(1.0f);
@@ -165,6 +170,14 @@ void ImagePanel::resizeEvent(QResizeEvent* event)
 {
     QGraphicsView::resizeEvent(event);
     QGraphicsView::centerOn(m_currViewportCenter);
+}
+
+
+void ImagePanel::loadSettings()
+{
+    if(!m_scene) return;
+
+    m_scene->setBackgroundBrush(g_settingsManager->themePalette().primaryBackground);
 }
 
 

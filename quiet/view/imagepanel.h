@@ -70,6 +70,9 @@ signals:
  
 
 public slots:
+    // load Settings if settings changed (ex. theme color)
+    void loadSettings();
+
     void loadImage(const QString&);
 
     void zoomInReceiver();
